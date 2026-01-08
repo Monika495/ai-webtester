@@ -1,0 +1,440 @@
+{% extends "base.html" %}
+
+{% block title %}NovaQA - Natural Language Test Automation{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Hero Section */
+    .hero {
+        text-align: center;
+        padding: 4rem 2rem;
+        background: linear-gradient(135deg, rgba(6, 182, 212, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%);
+        border-radius: 20px;
+        margin-bottom: 4rem;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .hero::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(circle, rgba(6, 182, 212, 0.1) 0%, transparent 70%);
+        animation: pulse 4s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+        0%, 100% { transform: scale(1); opacity: 0.5; }
+        50% { transform: scale(1.1); opacity: 0.8; }
+    }
+
+    .hero-content {
+        position: relative;
+        z-index: 1;
+    }
+
+    .hero h1 {
+        font-size: 3rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+        background: linear-gradient(135deg, #06B6D4 0%, #8B5CF6 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    .hero .tagline {
+        font-size: 1.5rem;
+        color: #94A3B8;
+        margin-bottom: 2rem;
+        font-weight: 500;
+    }
+
+    .hero .description {
+        font-size: 1.1rem;
+        color: #CBD5E1;
+        max-width: 700px;
+        margin: 0 auto 2rem;
+        line-height: 1.8;
+    }
+
+    .hero-buttons {
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+
+    .hero-buttons .btn {
+        font-size: 1.1rem;
+        padding: 1rem 2rem;
+    }
+
+    /* Features Section */
+    .features {
+        margin-bottom: 4rem;
+    }
+
+    .section-title {
+        text-align: center;
+        font-size: 2.5rem;
+        margin-bottom: 3rem;
+        color: #06B6D4;
+    }
+
+    .features-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 2rem;
+    }
+
+    .feature-card {
+        background: rgba(30, 41, 59, 0.6);
+        border-radius: 16px;
+        padding: 2rem;
+        border: 1px solid rgba(6, 182, 212, 0.2);
+        transition: all 0.3s;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .feature-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: linear-gradient(90deg, #06B6D4 0%, #8B5CF6 100%);
+        transform: scaleX(0);
+        transition: transform 0.3s;
+    }
+
+    .feature-card:hover {
+        transform: translateY(-10px);
+        border-color: #06B6D4;
+        box-shadow: 0 20px 40px rgba(6, 182, 212, 0.2);
+    }
+
+    .feature-card:hover::before {
+        transform: scaleX(1);
+    }
+
+    .feature-icon {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+        background: linear-gradient(135deg, #06B6D4 0%, #8B5CF6 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    .feature-title {
+        font-size: 1.5rem;
+        margin-bottom: 0.5rem;
+        color: #F8FAFC;
+    }
+
+    .feature-description {
+        color: #94A3B8;
+        line-height: 1.6;
+    }
+
+    /* How It Works Section */
+    .workflow {
+        margin-bottom: 4rem;
+    }
+
+    .workflow-steps {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 1rem;
+        margin-top: 3rem;
+    }
+
+    .workflow-step {
+        flex: 1;
+        min-width: 200px;
+        text-align: center;
+        position: relative;
+    }
+
+    .workflow-step::after {
+        content: '→';
+        position: absolute;
+        right: -1.5rem;
+        top: 2rem;
+        font-size: 2rem;
+        color: #06B6D4;
+    }
+
+    .workflow-step:last-child::after {
+        display: none;
+    }
+
+    .step-number {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #06B6D4 0%, #8B5CF6 100%);
+        color: white;
+        font-size: 1.5rem;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 1rem;
+        box-shadow: 0 10px 20px rgba(6, 182, 212, 0.3);
+    }
+
+    .step-title {
+        font-size: 1.2rem;
+        margin-bottom: 0.5rem;
+        color: #F8FAFC;
+    }
+
+    .step-description {
+        color: #94A3B8;
+        font-size: 0.95rem;
+    }
+
+    /* Stats Section */
+    .stats {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 2rem;
+        margin: 4rem 0;
+    }
+
+    .stat-card {
+        background: rgba(30, 41, 59, 0.6);
+        border-radius: 16px;
+        padding: 2rem;
+        text-align: center;
+        border: 1px solid rgba(6, 182, 212, 0.2);
+    }
+
+    .stat-number {
+        font-size: 3rem;
+        font-weight: 700;
+        background: linear-gradient(135deg, #06B6D4 0%, #8B5CF6 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin-bottom: 0.5rem;
+    }
+
+    .stat-label {
+        color: #94A3B8;
+        font-size: 1.1rem;
+    }
+
+    /* CTA Section */
+    .cta {
+        background: linear-gradient(135deg, rgba(6, 182, 212, 0.15) 0%, rgba(139, 92, 246, 0.15) 100%);
+        border-radius: 20px;
+        padding: 4rem 2rem;
+        text-align: center;
+        border: 1px solid rgba(6, 182, 212, 0.3);
+    }
+
+    .cta h2 {
+        font-size: 2.5rem;
+        margin-bottom: 1rem;
+        color: #F8FAFC;
+    }
+
+    .cta p {
+        font-size: 1.2rem;
+        color: #94A3B8;
+        margin-bottom: 2rem;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+        .hero h1 {
+            font-size: 2rem;
+        }
+
+        .hero .tagline {
+            font-size: 1.2rem;
+        }
+
+        .workflow-step::after {
+            display: none;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero">
+    <div class="hero-content">
+        <h1>NovaQA</h1>
+        <p class="tagline">Natural Language to Automated Tests</p>
+        <p class="description">
+            Transform your testing workflow with AI-powered automation. 
+            Simply describe your test in plain English, and watch as NovaQA 
+            converts it into fully automated browser tests with professional reports.
+        </p>
+        <div class="hero-buttons">
+            <a href="/demo" class="btn btn-primary">
+                <i class="fas fa-play"></i> Try Demo
+            </a>
+            <a href="/how-it-works" class="btn btn-secondary">
+                <i class="fas fa-info-circle"></i> Learn More
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section class="features">
+    <h2 class="section-title">Why Choose NovaQA?</h2>
+    
+    <div class="features-grid">
+        <div class="feature-card">
+            <div class="feature-icon">
+                <i class="fas fa-comment-dots"></i>
+            </div>
+            <h3 class="feature-title">Natural Language Input</h3>
+            <p class="feature-description">
+                No coding required. Write test instructions in plain English, 
+                or upload test documents. Our AI understands your intent.
+            </p>
+        </div>
+
+        <div class="feature-card">
+            <div class="feature-icon">
+                <i class="fas fa-brain"></i>
+            </div>
+            <h3 class="feature-title">AI-Powered Parsing</h3>
+            <p class="feature-description">
+                Advanced NLP technology converts your instructions into 
+                precise, executable test actions automatically.
+            </p>
+        </div>
+
+        <div class="feature-card">
+            <div class="feature-icon">
+                <i class="fas fa-robot"></i>
+            </div>
+            <h3 class="feature-title">Automated Execution</h3>
+            <p class="feature-description">
+                Playwright-powered browser automation executes tests with 
+                intelligent element detection and error handling.
+            </p>
+        </div>
+
+        <div class="feature-card">
+            <div class="feature-icon">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <h3 class="feature-title">Smart Validation</h3>
+            <p class="feature-description">
+                Built-in validation checks ensure your tests pass or fail 
+                correctly with detailed assertion reporting.
+            </p>
+        </div>
+
+        <div class="feature-card">
+            <div class="feature-icon">
+                <i class="fas fa-file-alt"></i>
+            </div>
+            <h3 class="feature-title">Professional Reports</h3>
+            <p class="feature-description">
+                Generate industry-standard test reports with detailed 
+                execution logs, screenshots, and downloadable formats.
+            </p>
+        </div>
+
+        <div class="feature-card">
+            <div class="feature-icon">
+                <i class="fas fa-chart-line"></i>
+            </div>
+            <h3 class="feature-title">Analytics Dashboard</h3>
+            <p class="feature-description">
+                Track test metrics, success rates, and execution trends 
+                with comprehensive analytics and visualizations.
+            </p>
+        </div>
+    </div>
+</section>
+
+<!-- How It Works Section -->
+<section class="workflow">
+    <h2 class="section-title">How It Works</h2>
+    
+    <div class="workflow-steps">
+        <div class="workflow-step">
+            <div class="step-number">1</div>
+            <h3 class="step-title">Input</h3>
+            <p class="step-description">
+                Write test instructions in natural language or upload files
+            </p>
+        </div>
+
+        <div class="workflow-step">
+            <div class="step-number">2</div>
+            <h3 class="step-title">Parse</h3>
+            <p class="step-description">
+                AI analyzes and converts to executable actions
+            </p>
+        </div>
+
+        <div class="workflow-step">
+            <div class="step-number">3</div>
+            <h3 class="step-title">Execute</h3>
+            <p class="step-description">
+                Automated browser testing with validation
+            </p>
+        </div>
+
+        <div class="workflow-step">
+            <div class="step-number">4</div>
+            <h3 class="step-title">Report</h3>
+            <p class="step-description">
+                Download professional test reports
+            </p>
+        </div>
+    </div>
+</section>
+
+<!-- Stats Section -->
+<section class="stats">
+    <div class="stat-card">
+        <div class="stat-number">95%</div>
+        <div class="stat-label">Success Rate</div>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-number">1000+</div>
+        <div class="stat-label">Tests Executed</div>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-number">5s</div>
+        <div class="stat-label">Avg Execution Time</div>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-number">24/7</div>
+        <div class="stat-label">Automated Testing</div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="cta">
+    <h2>Ready to Automate Your Testing?</h2>
+    <p>Start creating intelligent tests in minutes, no coding required.</p>
+    <a href="/dashboard" class="btn btn-primary" style="font-size: 1.2rem; padding: 1rem 2.5rem;">
+        <i class="fas fa-rocket"></i> Get Started Now
+    </a>
+</section>
+{% endblock %}
