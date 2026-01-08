@@ -1,0 +1,404 @@
+{% extends "base.html" %}
+
+{% block title %}How It Works - NovaQA{% endblock %}
+
+{% block extra_css %}
+<style>
+    .page-hero {
+        text-align: center;
+        padding: 3rem 2rem;
+        margin-bottom: 4rem;
+    }
+
+    .page-hero h1 {
+        font-size: 3rem;
+        font-weight: 800;
+        margin-bottom: 1rem;
+        background: linear-gradient(135deg, #06B6D4 0%, #8B5CF6 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    .page-hero p {
+        font-size: 1.3rem;
+        color: #94A3B8;
+        max-width: 700px;
+        margin: 0 auto;
+    }
+
+    .workflow-container {
+        max-width: 900px;
+        margin: 0 auto;
+    }
+
+    .step-section {
+        margin-bottom: 4rem;
+        position: relative;
+    }
+
+    .step-card {
+        background: rgba(30, 41, 59, 0.4);
+        border-radius: 20px;
+        padding: 3rem;
+        border: 1px solid rgba(6, 182, 212, 0.2);
+        position: relative;
+        transition: all 0.3s;
+    }
+
+    .step-card:hover {
+        transform: translateX(10px);
+        border-color: #06B6D4;
+        box-shadow: 0 20px 40px rgba(6, 182, 212, 0.3);
+    }
+
+    .step-header {
+        display: flex;
+        align-items: center;
+        gap: 2rem;
+        margin-bottom: 2rem;
+    }
+
+    .step-number-badge {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #06B6D4 0%, #8B5CF6 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2.5rem;
+        font-weight: 800;
+        color: white;
+        box-shadow: 0 15px 30px rgba(6, 182, 212, 0.4);
+        flex-shrink: 0;
+    }
+
+    .step-title {
+        font-size: 2rem;
+        color: #E2E8F0;
+        font-weight: 700;
+    }
+
+    .step-description {
+        color: #CBD5E1;
+        font-size: 1.1rem;
+        line-height: 1.8;
+        margin-bottom: 1.5rem;
+    }
+
+    .step-features {
+        list-style: none;
+        padding: 0;
+    }
+
+    .step-features li {
+        padding: 0.75rem 0;
+        padding-left: 2rem;
+        color: #94A3B8;
+        position: relative;
+    }
+
+    .step-features li::before {
+        content: '→';
+        position: absolute;
+        left: 0;
+        color: #06B6D4;
+        font-weight: bold;
+        font-size: 1.2rem;
+    }
+
+    .example-box {
+        background: rgba(15, 23, 42, 0.6);
+        border-radius: 12px;
+        padding: 1.5rem;
+        margin-top: 1.5rem;
+        border-left: 4px solid #06B6D4;
+    }
+
+    .example-label {
+        color: #06B6D4;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+        display: block;
+    }
+
+    .example-text {
+        color: #8B5CF6;
+        font-family: 'Courier New', monospace;
+        font-size: 1rem;
+    }
+
+    .connector-arrow {
+        text-align: center;
+        font-size: 3rem;
+        color: #06B6D4;
+        margin: 2rem 0;
+        animation: bounce 2s infinite;
+    }
+
+    @keyframes bounce {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-10px); }
+    }
+
+    .input-methods-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1.5rem;
+        margin: 2rem 0;
+    }
+
+    .input-method {
+        background: rgba(30, 41, 59, 0.4);
+        border-radius: 12px;
+        padding: 1.5rem;
+        text-align: center;
+        border: 1px solid rgba(6, 182, 212, 0.2);
+        transition: all 0.3s;
+    }
+
+    .input-method:hover {
+        transform: translateY(-5px);
+        border-color: #06B6D4;
+        box-shadow: 0 10px 20px rgba(6, 182, 212, 0.3);
+    }
+
+    .input-method i {
+        font-size: 2.5rem;
+        background: linear-gradient(135deg, #06B6D4 0%, #8B5CF6 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin-bottom: 1rem;
+    }
+
+    .input-method h4 {
+        color: #E2E8F0;
+        margin-bottom: 0.5rem;
+    }
+
+    .input-method p {
+        color: #94A3B8;
+        font-size: 0.9rem;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Page Hero -->
+<section class="page-hero">
+    <h1>How NovaQA Works</h1>
+    <p>
+        A step-by-step breakdown of our intelligent test automation workflow
+    </p>
+</section>
+
+<!-- Workflow Steps -->
+<div class="workflow-container">
+    
+    <!-- Step 1: Input -->
+    <section class="step-section">
+        <div class="step-card">
+            <div class="step-header">
+                <div class="step-number-badge">1</div>
+                <h2 class="step-title">Input Your Test</h2>
+            </div>
+            
+            <p class="step-description">
+                Begin by providing your test instructions through multiple flexible input methods. 
+                Our platform supports various formats to accommodate different workflows and preferences.
+            </p>
+
+            <div class="input-methods-grid">
+                <div class="input-method">
+                    <i class="fas fa-keyboard"></i>
+                    <h4>Text Input</h4>
+                    <p>Type instructions in plain English</p>
+                </div>
+
+                <div class="input-method">
+                    <i class="fas fa-file-upload"></i>
+                    <h4>File Upload</h4>
+                    <p>Upload .txt, .doc, or .pdf files</p>
+                </div>
+
+                <div class="input-method">
+                    <i class="fas fa-link"></i>
+                    <h4>Form URL</h4>
+                    <p>Provide a form link to test</p>
+                </div>
+
+                <div class="input-method">
+                    <i class="fas fa-image"></i>
+                    <h4>Screenshot</h4>
+                    <p>Upload images with OCR</p>
+                </div>
+            </div>
+
+            <div class="example-box">
+                <span class="example-label">Example Input:</span>
+                <span class="example-text">"Open google.com and search for artificial intelligence"</span>
+            </div>
+        </div>
+    </section>
+
+    <div class="connector-arrow">↓</div>
+
+    <!-- Step 2: Parse -->
+    <section class="step-section">
+        <div class="step-card">
+            <div class="step-header">
+                <div class="step-number-badge">2</div>
+                <h2 class="step-title">AI Parsing</h2>
+            </div>
+            
+            <p class="step-description">
+                Our advanced natural language processing engine analyzes your input and 
+                extracts actionable test steps with precise targets and validation criteria.
+            </p>
+
+            <ul class="step-features">
+                <li>Natural language understanding using NLP algorithms</li>
+                <li>Intent recognition and action extraction</li>
+                <li>Target identification (URLs, elements, search queries)</li>
+                <li>Validation requirement detection</li>
+                <li>Context-aware parsing for complex instructions</li>
+            </ul>
+
+            <div class="example-box">
+                <span class="example-label">Parsed Output:</span>
+                <div class="example-text" style="margin-top: 0.5rem;">
+                    Action 1: Navigate to https://google.com<br>
+                    Action 2: Type "artificial intelligence" in search box<br>
+                    Action 3: Validate page contains "artificial intelligence"
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="connector-arrow">↓</div>
+
+    <!-- Step 3: Execute -->
+    <section class="step-section">
+        <div class="step-card">
+            <div class="step-header">
+                <div class="step-number-badge">3</div>
+                <h2 class="step-title">Automated Execution</h2>
+            </div>
+            
+            <p class="step-description">
+                Playwright-powered browser automation executes your test with intelligent 
+                element detection, adaptive waiting, and robust error handling.
+            </p>
+
+            <ul class="step-features">
+                <li>Headless or visible browser execution modes</li>
+                <li>Intelligent element selector generation</li>
+                <li>Adaptive DOM traversal and element detection</li>
+                <li>Automatic wait handling for dynamic content</li>
+                <li>Screenshot capture on failures</li>
+                <li>Multi-browser support (Chromium, Firefox, WebKit)</li>
+            </ul>
+
+            <div class="example-box">
+                <span class="example-label">Execution Log:</span>
+                <div class="example-text" style="margin-top: 0.5rem;">
+                    ✓ Step 1: Navigate - PASSED (2.3s)<br>
+                    ✓ Step 2: Search - PASSED (1.8s)<br>
+                    ✓ Step 3: Validate - PASSED (0.5s)
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="connector-arrow">↓</div>
+
+    <!-- Step 4: Validate -->
+    <section class="step-section">
+        <div class="step-card">
+            <div class="step-header">
+                <div class="step-number-badge">4</div>
+                <h2 class="step-title">Smart Validation</h2>
+            </div>
+            
+            <p class="step-description">
+                Automated validation ensures your test results are accurate with multiple 
+                assertion types and intelligent result checking.
+            </p>
+
+            <ul class="step-features">
+                <li>Text content validation (contains, equals, regex)</li>
+                <li>URL validation and navigation checks</li>
+                <li>Element presence and visibility verification</li>
+                <li>Dynamic content validation</li>
+                <li>Custom assertion rule support</li>
+            </ul>
+
+            <div class="example-box">
+                <span class="example-label">Validation Results:</span>
+                <div class="example-text" style="margin-top: 0.5rem;">
+                    ✓ Text Validation: PASSED<br>
+                    ✓ URL Validation: PASSED<br>
+                    ✓ Element Validation: PASSED
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="connector-arrow">↓</div>
+
+    <!-- Step 5: Report -->
+    <section class="step-section">
+        <div class="step-card">
+            <div class="step-header">
+                <div class="step-number-badge">5</div>
+                <h2 class="step-title">Generate Report</h2>
+            </div>
+            
+            <p class="step-description">
+                Comprehensive test reports are automatically generated with detailed 
+                execution logs, analytics, and downloadable formats for documentation.
+            </p>
+
+            <ul class="step-features">
+                <li>Detailed step-by-step execution breakdown</li>
+                <li>Pass/fail status with error messages</li>
+                <li>Execution time and performance metrics</li>
+                <li>Screenshot attachments for failures</li>
+                <li>Downloadable HTML and PDF formats</li>
+                <li>Historical data and trend analytics</li>
+            </ul>
+
+            <div class="example-box">
+                <span class="example-label">Report Summary:</span>
+                <div class="example-text" style="margin-top: 0.5rem;">
+                    Test Status: PASSED<br>
+                    Total Steps: 3 | Passed: 3 | Failed: 0<br>
+                    Execution Time: 4.6 seconds<br>
+                    Success Rate: 100%
+                </div>
+            </div>
+        </div>
+    </section>
+
+</div>
+
+<!-- Call to Action -->
+<section style="text-align: center; margin: 4rem 0;">
+    <div class="step-card" style="max-width: 700px; margin: 0 auto;">
+        <h2 style="color: #E2E8F0; margin-bottom: 1rem;">Ready to Try It?</h2>
+        <p style="color: #94A3B8; margin-bottom: 2rem;">
+            Experience the power of AI-driven test automation firsthand
+        </p>
+        <div style="display: flex; gap: 1rem; justify-content: center;">
+            <a href="/demo" class="btn btn-primary" style="font-size: 1.1rem; padding: 1rem 2rem;">
+                <i class="fas fa-play-circle"></i> Try Demo
+            </a>
+            <a href="/dashboard" class="btn btn-secondary" style="font-size: 1.1rem; padding: 1rem 2rem;">
+                <i class="fas fa-rocket"></i> Get Started
+            </a>
+        </div>
+    </div>
+</section>
+{% endblock %}
