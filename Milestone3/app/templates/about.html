@@ -1,0 +1,361 @@
+{% extends "base.html" %}
+
+{% block title %}About - NovaQA{% endblock %}
+
+{% block extra_css %}
+<style>
+    .about-hero {
+        text-align: center;
+        padding: 3rem 2rem;
+        margin-bottom: 4rem;
+    }
+
+    .about-hero h1 {
+        font-size: 3rem;
+        font-weight: 800;
+        margin-bottom: 1rem;
+        background: linear-gradient(135deg, #06B6D4 0%, #8B5CF6 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    .about-hero p {
+        font-size: 1.3rem;
+        color: #94A3B8;
+        max-width: 700px;
+        margin: 0 auto;
+    }
+
+    .section {
+        margin-bottom: 4rem;
+    }
+
+    .section-heading {
+        font-size: 2rem;
+        color: #06B6D4;
+        margin-bottom: 1.5rem;
+        font-weight: 700;
+    }
+
+    .content-card {
+        background: rgba(30, 41, 59, 0.4);
+        border-radius: 16px;
+        padding: 2.5rem;
+        border: 1px solid rgba(6, 182, 212, 0.2);
+        margin-bottom: 2rem;
+    }
+
+    .content-card h3 {
+        color: #8B5CF6;
+        margin-bottom: 1rem;
+        font-size: 1.5rem;
+    }
+
+    .content-card p {
+        color: #CBD5E1;
+        line-height: 1.8;
+        margin-bottom: 1rem;
+    }
+
+    .content-card ul {
+        list-style: none;
+        padding: 0;
+    }
+
+    .content-card li {
+        color: #CBD5E1;
+        padding: 0.5rem 0;
+        padding-left: 2rem;
+        position: relative;
+    }
+
+    .content-card li::before {
+        content: '✓';
+        position: absolute;
+        left: 0;
+        color: #06B6D4;
+        font-weight: bold;
+        font-size: 1.2rem;
+    }
+
+    .architecture-diagram {
+        background: rgba(30, 41, 59, 0.6);
+        border-radius: 16px;
+        padding: 3rem 2rem;
+        border: 1px solid rgba(6, 182, 212, 0.3);
+        text-align: center;
+    }
+
+    .flow-step {
+        display: inline-block;
+        background: linear-gradient(135deg, #06B6D4 0%, #8B5CF6 100%);
+        color: white;
+        padding: 1rem 2rem;
+        border-radius: 12px;
+        margin: 0.5rem;
+        font-weight: 600;
+        box-shadow: 0 4px 15px rgba(6, 182, 212, 0.3);
+    }
+
+    .flow-arrow {
+        display: inline-block;
+        color: #06B6D4;
+        font-size: 2rem;
+        margin: 0 1rem;
+    }
+
+    .tech-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 1.5rem;
+        margin-top: 2rem;
+    }
+
+    .tech-item {
+        background: rgba(30, 41, 59, 0.4);
+        border-radius: 12px;
+        padding: 1.5rem;
+        border: 1px solid rgba(6, 182, 212, 0.2);
+        text-align: center;
+        transition: all 0.3s;
+    }
+
+    .tech-item:hover {
+        transform: translateY(-5px);
+        border-color: #06B6D4;
+        box-shadow: 0 10px 25px rgba(6, 182, 212, 0.3);
+    }
+
+    .tech-item i {
+        font-size: 3rem;
+        background: linear-gradient(135deg, #06B6D4 0%, #8B5CF6 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin-bottom: 1rem;
+    }
+
+    .tech-item h4 {
+        color: #E2E8F0;
+        margin-bottom: 0.5rem;
+    }
+
+    .tech-item p {
+        color: #94A3B8;
+        font-size: 0.9rem;
+    }
+
+    .developer-card {
+        background: rgba(30, 41, 59, 0.4);
+        border-radius: 16px;
+        padding: 2.5rem;
+        border: 1px solid rgba(6, 182, 212, 0.2);
+        text-align: center;
+    }
+
+    .developer-card h3 {
+        color: #06B6D4;
+        font-size: 2rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .developer-card .role {
+        color: #8B5CF6;
+        font-size: 1.2rem;
+        margin-bottom: 1rem;
+    }
+
+    .developer-card p {
+        color: #CBD5E1;
+        line-height: 1.8;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="about-hero">
+    <h1>About NovaQA</h1>
+    <p>
+        A comprehensive AI-powered test automation platform designed to 
+        simplify and streamline the testing process.
+    </p>
+</section>
+
+<!-- Problem Statement -->
+<section class="section">
+    <h2 class="section-heading">Problem Statement</h2>
+    <div class="content-card">
+        <h3>The Challenge in Traditional Test Automation</h3>
+        <p>
+            Traditional test automation faces several critical challenges that limit 
+            its accessibility and effectiveness:
+        </p>
+        <ul>
+            <li>Requires extensive programming knowledge and technical expertise</li>
+            <li>Time-consuming script writing and maintenance</li>
+            <li>Complex tool configurations and setup processes</li>
+            <li>Steep learning curve for non-technical team members</li>
+            <li>Difficulty in adapting to changing application interfaces</li>
+            <li>Limited collaboration between technical and non-technical teams</li>
+        </ul>
+        <p style="margin-top: 1.5rem;">
+            These barriers prevent many organizations from achieving comprehensive 
+            test coverage and slow down the software development lifecycle.
+        </p>
+    </div>
+</section>
+
+<!-- Solution -->
+<section class="section">
+    <h2 class="section-heading">Our Solution</h2>
+    <div class="content-card">
+        <h3>Democratizing Test Automation with AI</h3>
+        <p>
+            NovaQA revolutionizes test automation by enabling anyone to create 
+            and execute automated tests using simple natural language instructions. 
+            Our platform leverages advanced AI and natural language processing to:
+        </p>
+        <ul>
+            <li>Convert plain English instructions into executable test scripts</li>
+            <li>Automatically detect and interact with web elements</li>
+            <li>Perform intelligent validation of test results</li>
+            <li>Generate professional test reports with detailed analytics</li>
+            <li>Support multiple input methods (text, documents, URLs, images)</li>
+            <li>Provide real-time execution monitoring and feedback</li>
+        </ul>
+    </div>
+</section>
+
+<!-- Objectives -->
+<section class="section">
+    <h2 class="section-heading">Project Objectives</h2>
+    <div class="content-card">
+        <ul>
+            <li>Enable natural language-based test creation for non-technical users</li>
+            <li>Implement AI-driven parsing and interpretation of test instructions</li>
+            <li>Automate browser-based testing with intelligent element detection</li>
+            <li>Provide automated validation and assertion capabilities</li>
+            <li>Generate industry-standard test reports with comprehensive details</li>
+            <li>Support multiple input formats for maximum flexibility</li>
+            <li>Deliver real-time execution monitoring and analytics</li>
+            <li>Create a user-friendly, accessible interface for all skill levels</li>
+        </ul>
+    </div>
+</section>
+
+<!-- System Architecture -->
+<section class="section">
+    <h2 class="section-heading">System Architecture</h2>
+    <div class="architecture-diagram">
+        <h3 style="color: #E2E8F0; margin-bottom: 2rem;">Data Flow Pipeline</h3>
+        <div style="margin: 2rem 0;">
+            <div class="flow-step">User Input</div>
+            <span class="flow-arrow">→</span>
+            <div class="flow-step">NLP Parser</div>
+            <span class="flow-arrow">→</span>
+            <div class="flow-step">Code Generator</div>
+            <span class="flow-arrow">→</span>
+            <div class="flow-step">Executor</div>
+            <span class="flow-arrow">→</span>
+            <div class="flow-step">Validator</div>
+            <span class="flow-arrow">→</span>
+            <div class="flow-step">Report Generator</div>
+        </div>
+    </div>
+
+    <div class="content-card" style="margin-top: 2rem;">
+        <h3>Component Description</h3>
+        <p><strong>Input Layer:</strong> Accepts natural language text, uploaded documents (.txt, .doc, .pdf), form URLs, or screenshots with OCR capability.</p>
+        <p><strong>Parser Module:</strong> Uses natural language processing to extract test actions, targets, and validations from user input.</p>
+        <p><strong>Code Generator:</strong> Converts parsed actions into executable Playwright automation scripts.</p>
+        <p><strong>Executor:</strong> Runs browser automation with intelligent element detection and error handling.</p>
+        <p><strong>Validator:</strong> Performs automated checks including text validation, URL validation, and element verification.</p>
+        <p><strong>Report Generator:</strong> Creates comprehensive test reports with execution details, results, and analytics.</p>
+    </div>
+</section>
+
+<!-- Technology Stack -->
+<section class="section">
+    <h2 class="section-heading">Technology Stack</h2>
+    
+    <div class="tech-grid">
+        <div class="tech-item">
+            <i class="fab fa-python"></i>
+            <h4>Python</h4>
+            <p>Core backend language</p>
+        </div>
+
+        <div class="tech-item">
+            <i class="fas fa-flask"></i>
+            <h4>Flask</h4>
+            <p>Web framework</p>
+        </div>
+
+        <div class="tech-item">
+            <i class="fas fa-project-diagram"></i>
+            <h4>LangGraph</h4>
+            <p>AI workflow orchestration</p>
+        </div>
+
+        <div class="tech-item">
+            <i class="fas fa-robot"></i>
+            <h4>Playwright</h4>
+            <p>Browser automation</p>
+        </div>
+
+        <div class="tech-item">
+            <i class="fas fa-brain"></i>
+            <h4>NLP</h4>
+            <p>Natural language processing</p>
+        </div>
+
+        <div class="tech-item">
+            <i class="fas fa-code"></i>
+            <h4>HTML/CSS/JS</h4>
+            <p>Frontend interface</p>
+        </div>
+
+        <div class="tech-item">
+            <i class="fas fa-database"></i>
+            <h4>SQLite</h4>
+            <p>Data storage</p>
+        </div>
+
+        <div class="tech-item">
+            <i class="fas fa-chart-bar"></i>
+            <h4>Chart.js</h4>
+            <p>Data visualization</p>
+        </div>
+    </div>
+</section>
+
+<!-- Developer Info -->
+<section class="section">
+    <h2 class="section-heading">Developer</h2>
+    <div class="developer-card">
+        <h3>Monika</h3>
+        <p class="role">Software Developer & Project Lead</p>
+        <p>
+            Final year engineering project focused on leveraging artificial intelligence 
+            and natural language processing to revolutionize software testing. 
+            Passionate about creating accessible, user-friendly solutions that bridge 
+            the gap between technical and non-technical users.
+        </p>
+    </div>
+</section>
+
+<!-- Call to Action -->
+<section class="section">
+    <div class="content-card" style="text-align: center;">
+        <h3>Ready to Experience NovaQA?</h3>
+        <p style="margin: 1.5rem 0;">
+            Try our platform and see how easy test automation can be.
+        </p>
+        <a href="/demo" class="btn btn-primary" style="font-size: 1.1rem; padding: 1rem 2rem;">
+            <i class="fas fa-play-circle"></i> Try Demo Now
+        </a>
+    </div>
+</section>
+{% endblock %}
