@@ -1,0 +1,36 @@
+{
+  "instruction": "search python on google",
+  "parsed": [
+    {
+      "action": "navigate",
+      "url": "https://google.com"
+    },
+    {
+      "action": "wait",
+      "seconds": 3
+    }
+  ],
+  "execution": [
+    {
+      "action": "navigate",
+      "status": "Passed",
+      "details": "Navigated to https://google.com"
+    },
+    {
+      "action": "wait",
+      "status": "Passed",
+      "details": "Waited 3 seconds"
+    }
+  ],
+  "generated_code": "from playwright.sync_api import sync_playwright\nimport time\n\ndef run_test(headless=True):\n    with sync_playwright() as p:\n        browser = p.chromium.launch(headless=headless)\n        page = browser.new_page()\n        page.set_default_timeout(30000)\n\n        # Navigate to https://google.com\n        page.goto('https://google.com')\n        time.sleep(2)\n\n        time.sleep(3)\n\n        browser.close()\n\nif __name__ == '__main__':\n    run_test(headless=False)",
+  "summary": "\ud83d\udcca EXECUTION SUMMARY:\n\u2705 Passed: 2 | \u274c Failed: 0 | \u26a0\ufe0f Skipped: 0\n",
+  "total_steps": 2,
+  "passed_steps": 2,
+  "failed_steps": 0,
+  "success_rate": 100.0,
+  "status": "PASSED",
+  "auto_fill": true,
+  "headless": true,
+  "created_at": "2026-01-15 00:21:52",
+  "report_id": "report_20260115002152_de78bfb9"
+}

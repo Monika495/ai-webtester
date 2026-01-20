@@ -1,0 +1,1232 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - NovaQA{% endblock %}
+
+{% block extra_css %}
+<style>
+    .dashboard-header {
+        text-align: center;
+        padding: 2rem 0;
+        margin-bottom: 3rem;
+    }
+
+    .dashboard-header h1 {
+        font-size: 2.5rem;
+        font-weight: 800;
+        margin-bottom: 0.5rem;
+        background: linear-gradient(135deg, #06B6D4 0%, #8B5CF6 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    .dashboard-header p {
+        color: #94A3B8;
+        font-size: 1.1rem;
+    }
+
+    .stats-row {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1.5rem;
+        margin-bottom: 3rem;
+    }
+
+    .stat-box {
+        background: rgba(30, 41, 59, 0.4);
+        border-radius: 12px;
+        padding: 1.5rem;
+        border: 1px solid rgba(6, 182, 212, 0.2);
+        text-align: center;
+        transition: all 0.3s;
+    }
+
+    .stat-box:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(6, 182, 212, 0.2);
+    }
+
+    .stat-number {
+        font-size: 2.5rem;
+        font-weight: 800;
+        background: linear-gradient(135deg, #06B6D4 0%, #8B5CF6 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin-bottom: 0.5rem;
+    }
+
+    .stat-label {
+        color: #94A3B8;
+        font-size: 0.95rem;
+    }
+
+    .main-card {
+        background: rgba(30, 41, 59, 0.4);
+        border-radius: 20px;
+        padding: 3rem;
+        border: 1px solid rgba(6, 182, 212, 0.2);
+        margin-bottom: 2rem;
+    }
+
+    .card-title {
+        color: #06B6D4;
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin-bottom: 2rem;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+    }
+
+    .input-container {
+        margin-bottom: 2rem;
+    }
+
+    .text-input {
+        width: 100%;
+        min-height: 200px;
+        background: rgba(15, 23, 42, 0.6);
+        border: 2px solid rgba(6, 182, 212, 0.3);
+        border-radius: 12px;
+        padding: 1.5rem;
+        color: #E2E8F0;
+        font-size: 1rem;
+        font-family: 'Inter', sans-serif;
+        resize: vertical;
+        transition: all 0.3s;
+        line-height: 1.6;
+    }
+
+    .text-input:focus {
+        outline: none;
+        border-color: #06B6D4;
+        box-shadow: 0 0 0 3px rgba(6, 182, 212, 0.1);
+    }
+
+    .text-input::placeholder {
+        color: #64748B;
+        font-size: 1rem;
+    }
+
+    .options-group {
+        display: flex;
+        gap: 2rem;
+        align-items: center;
+        margin: 1.5rem 0;
+        flex-wrap: wrap;
+    }
+
+    .option-item {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        color: #CBD5E1;
+        padding: 0.5rem;
+        border-radius: 8px;
+        transition: all 0.3s;
+    }
+
+    .option-item:hover {
+        background: rgba(6, 182, 212, 0.1);
+    }
+
+    .option-item input[type="checkbox"] {
+        width: 20px;
+        height: 20px;
+        cursor: pointer;
+        accent-color: #06B6D4;
+    }
+
+    .option-item.random-data {
+        background: rgba(139, 92, 246, 0.1);
+        padding: 0.75rem 1.25rem;
+        border-radius: 8px;
+        border: 1px solid rgba(139, 92, 246, 0.3);
+    }
+
+    .option-item.random-data:hover {
+        background: rgba(139, 92, 246, 0.2);
+        border-color: #8B5CF6;
+        transform: translateY(-2px);
+    }
+
+    .random-data-badge {
+        background: linear-gradient(135deg, #8B5CF6 0%, #06B6D4 100%);
+        color: white;
+        padding: 0.25rem 0.75rem;
+        border-radius: 6px;
+        font-size: 0.75rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        margin-left: 0.5rem;
+    }
+
+    .info-box {
+        background: rgba(139, 92, 246, 0.1);
+        border: 1px solid rgba(139, 92, 246, 0.2);
+        border-radius: 12px;
+        padding: 1.5rem;
+        margin: 1.5rem 0;
+        color: #CBD5E1;
+    }
+
+    .info-box i {
+        color: #8B5CF6;
+        margin-right: 0.5rem;
+    }
+
+    .info-box strong {
+        color: #8B6CF6;
+        font-size: 1.1rem;
+    }
+
+    .requirements-section {
+        background: rgba(239, 68, 68, 0.1);
+        border: 1px solid rgba(239, 68, 68, 0.2);
+        border-radius: 12px;
+        padding: 1.5rem;
+        margin: 1.5rem 0;
+        color: #CBD5E1;
+    }
+
+    .requirements-section i {
+        color: #EF4444;
+        margin-right: 0.5rem;
+    }
+
+    .requirements-section strong {
+        color: #EF4444;
+        font-size: 1.1rem;
+    }
+
+    .examples-section {
+        background: rgba(30, 41, 59, 0.4);
+        border-radius: 12px;
+        padding: 1.5rem;
+        margin-top: 2rem;
+        border: 1px solid rgba(6, 182, 212, 0.2);
+    }
+
+    .examples-section h4 {
+        color: #06B6D4;
+        margin-bottom: 1rem;
+        font-size: 1.1rem;
+    }
+
+    .example-item {
+        background: rgba(15, 23, 42, 0.6);
+        border-radius: 8px;
+        padding: 1rem;
+        margin-bottom: 0.75rem;
+        cursor: pointer;
+        transition: all 0.3s;
+        border-left: 3px solid #06B6D4;
+    }
+
+    .example-item:hover {
+        background: rgba(6, 182, 212, 0.1);
+        transform: translateX(5px);
+    }
+
+    .example-text {
+        color: #CBD5E1;
+        font-family: 'Courier New', monospace;
+        font-size: 0.9rem;
+    }
+
+    .action-buttons {
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+        margin-top: 2rem;
+    }
+
+    .btn {
+        padding: 1rem 2rem;
+        font-size: 1.1rem;
+        font-weight: 600;
+        border-radius: 10px;
+        border: none;
+        cursor: pointer;
+        transition: all 0.3s;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+    }
+
+    .btn-primary {
+        background: linear-gradient(135deg, #06B6D4 0%, #8B5CF6 100%);
+        color: white;
+    }
+
+    .btn-primary:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 25px rgba(6, 182, 212, 0.4);
+    }
+
+    .btn-secondary {
+        background: rgba(6, 182, 212, 0.1);
+        color: #06B6D4;
+        border: 2px solid #06B6D4;
+    }
+
+    .btn-secondary:hover {
+        background: rgba(6, 182, 212, 0.2);
+        transform: translateY(-3px);
+    }
+
+    .execution-card {
+        background: rgba(15, 23, 42, 0.6);
+        border-radius: 12px;
+        padding: 2rem;
+        border: 1px solid rgba(6, 182, 212, 0.2);
+        margin-top: 2rem;
+        display: none;
+    }
+
+    .execution-card.show {
+        display: block;
+        animation: slideIn 0.5s ease;
+    }
+
+    @keyframes slideIn {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .result-actions {
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+        margin-top: 2rem;
+        padding-top: 2rem;
+        border-top: 1px solid rgba(6, 182, 212, 0.2);
+        flex-wrap: wrap;
+    }
+
+    .timeline-item {
+        background: rgba(30, 41, 59, 0.4);
+        border-radius: 10px;
+        padding: 1.5rem;
+        margin-bottom: 1rem;
+        border-left: 4px solid #06B6D4;
+        transition: all 0.3s;
+    }
+
+    .timeline-item:hover {
+        transform: translateX(5px);
+        background: rgba(30, 41, 59, 0.6);
+    }
+
+    .timeline-item.failed {
+        border-left-color: #EF4444;
+        background: rgba(239, 68, 68, 0.05);
+    }
+
+    .timeline-item.warning {
+        border-left-color: #F59E0B;
+        background: rgba(245, 158, 11, 0.05);
+    }
+
+    .timeline-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 0.75rem;
+    }
+
+    .timeline-action {
+        color: #E2E8F0;
+        font-weight: 600;
+        font-size: 1.1rem;
+    }
+
+    .timeline-status {
+        padding: 0.375rem 1rem;
+        border-radius: 8px;
+        font-size: 0.875rem;
+        font-weight: 600;
+        min-width: 80px;
+        text-align: center;
+    }
+
+    .timeline-status.passed {
+        background: rgba(16, 185, 129, 0.2);
+        color: #10B981;
+    }
+
+    .timeline-status.failed {
+        background: rgba(239, 68, 68, 0.2);
+        color: #EF4444;
+    }
+
+    .timeline-status.warning {
+        background: rgba(245, 158, 11, 0.2);
+        color: #F59E0B;
+    }
+
+    .timeline-status.info {
+        background: rgba(6, 182, 212, 0.2);
+        color: #06B6D4;
+    }
+
+    .timeline-description {
+        color: #94A3B8;
+        margin-bottom: 0.5rem;
+        line-height: 1.5;
+    }
+
+    .error-alert {
+        background: rgba(239, 68, 68, 0.1);
+        border: 1px solid rgba(239, 68, 68, 0.3);
+        border-radius: 12px;
+        padding: 1.5rem;
+        margin-top: 2rem;
+        color: #EF4444;
+    }
+
+    .error-alert strong {
+        display: block;
+        margin-bottom: 0.5rem;
+        font-size: 1.1rem;
+    }
+
+    .error-alert ul {
+        margin: 0.5rem 0;
+        padding-left: 1.5rem;
+    }
+
+    .error-alert li {
+        margin-bottom: 0.25rem;
+    }
+
+    .loading-state {
+        text-align: center;
+        padding: 3rem;
+    }
+
+    .loading-state i {
+        font-size: 3rem;
+        color: #06B6D4;
+        animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+
+    .data-usage-badge {
+        display: inline-block;
+        padding: 0.25rem 0.75rem;
+        border-radius: 6px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        margin-left: 0.5rem;
+    }
+
+    .provided-data {
+        background: rgba(6, 182, 212, 0.2);
+        color: #06B6D4;
+    }
+
+    .generated-data {
+        background: rgba(139, 92, 246, 0.2);
+        color: #8B5CF6;
+    }
+
+    .data-summary {
+        background: rgba(15, 23, 42, 0.8);
+        border-radius: 10px;
+        padding: 1.5rem;
+        margin: 1.5rem 0;
+        border: 1px solid rgba(6, 182, 212, 0.3);
+    }
+
+    .data-summary h5 {
+        color: #06B6D4;
+        margin-bottom: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .data-summary-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1rem;
+    }
+
+    .data-item {
+        background: rgba(30, 41, 59, 0.6);
+        border-radius: 8px;
+        padding: 1rem;
+    }
+
+    .data-label {
+        color: #94A3B8;
+        font-size: 0.875rem;
+        margin-bottom: 0.25rem;
+    }
+
+    .data-value {
+        color: #E2E8F0;
+        font-weight: 600;
+        font-size: 1rem;
+        word-break: break-all;
+    }
+
+    .warning-banner {
+        background: rgba(245, 158, 11, 0.1);
+        border: 1px solid rgba(245, 158, 11, 0.3);
+        border-radius: 12px;
+        padding: 1.5rem;
+        margin: 1.5rem 0;
+        color: #F59E0B;
+        text-align: center;
+    }
+
+    .success-banner {
+        background: rgba(16, 185, 129, 0.1);
+        border: 1px solid rgba(16, 185, 129, 0.3);
+        border-radius: 12px;
+        padding: 1.5rem;
+        margin: 1.5rem 0;
+        color: #10B981;
+        text-align: center;
+    }
+
+    .test-mode-indicator {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        z-index: 1000;
+        background: rgba(139, 92, 246, 0.2);
+        border: 1px solid #8B5CF6;
+        border-radius: 20px;
+        padding: 0.5rem 1rem;
+        color: #8B5CF6;
+        font-size: 0.875rem;
+        font-weight: 600;
+        display: none;
+    }
+
+    .test-mode-indicator.active {
+        display: block;
+        animation: fadeIn 0.5s ease;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(-10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .feature-highlight {
+        background: linear-gradient(135deg, #06B6D4 0%, #8B5CF6 100%);
+        padding: 2px;
+        border-radius: 8px;
+        margin: 0.5rem 0;
+    }
+
+    .feature-highlight-inner {
+        background: rgba(15, 23, 42, 0.95);
+        border-radius: 6px;
+        padding: 1.5rem;
+    }
+
+    .feature-title {
+        color: #06B6D4;
+        font-size: 1.1rem;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .feature-desc {
+        color: #94A3B8;
+        font-size: 0.9rem;
+        line-height: 1.5;
+    }
+
+    .instruction-type {
+        display: inline-block;
+        padding: 0.25rem 0.75rem;
+        border-radius: 20px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        margin-left: 0.5rem;
+    }
+
+    .type-provided {
+        background: rgba(6, 182, 212, 0.2);
+        color: #06B6D4;
+    }
+
+    .type-random {
+        background: rgba(139, 92, 246, 0.2);
+        color: #8B5CF6;
+    }
+
+    .type-mixed {
+        background: rgba(245, 158, 11, 0.2);
+        color: #F59E0B;
+    }
+
+    .type-error {
+        background: rgba(239, 68, 68, 0.2);
+        color: #EF4444;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="test-mode-indicator" id="testModeIndicator">
+    <i class="fas fa-dice"></i> Random Data Mode: <span id="modeStatus">OFF</span>
+</div>
+
+<section class="dashboard-header">
+    <h1>NovaQA Smart Test Automation</h1>
+    <p>Intelligent Test Execution with Smart Data Management</p>
+</section>
+
+<div class="stats-row">
+    <div class="stat-box">
+        <div class="stat-number" id="totalTests">0</div>
+        <div class="stat-label">Total Tests</div>
+    </div>
+    <div class="stat-box">
+        <div class="stat-number" id="passedTests">0</div>
+        <div class="stat-label">Passed</div>
+    </div>
+    <div class="stat-box">
+        <div class="stat-number" id="failedTests">0</div>
+        <div class="stat-label">Failed</div>
+    </div>
+    <div class="stat-box">
+        <div class="stat-number" id="successRate">0%</div>
+        <div class="stat-label">Success Rate</div>
+    </div>
+</div>
+
+<div class="main-card">
+    <h2 class="card-title">
+        <i class="fas fa-plus-circle"></i> Create Smart Test
+    </h2>
+
+    <form id="testForm">
+        <div class="input-container">
+            <textarea 
+                id="instructionText" 
+                class="text-input" 
+                placeholder="Enter test instruction in plain English...
+
+💡 SMART EXAMPLES:
+
+A) With Provided Credentials (always works):
+  • 'signup on linkedin with email test@mail.com password test123'
+  • 'login to facebook with email user@test.com password pass123'
+
+B) Without Credentials (requires Random Data):
+  • 'create an account on linkedin'  🎲 Random Data Required
+  • 'signup on github'  🎲 Random Data Required
+
+C) Simple Search Tests (no credentials needed):
+  • 'search python on google'  ✅ Always works
+  • 'search laptop on amazon and add to cart'  ✅ Always works"
+                required
+                rows="8"
+            ></textarea>
+        </div>
+
+        <div class="options-group">
+            <label class="option-item">
+                <input type="checkbox" id="headlessMode" checked>
+                <span>Headless Mode (faster)</span>
+            </label>
+            
+            <label class="option-item random-data">
+                <input type="checkbox" id="useRandomData" checked>
+                <span>
+                    <i class="fas fa-dice"></i> Use Random Data
+                    <span class="random-data-badge">SMART</span>
+                </span>
+            </label>
+        </div>
+
+        <div class="feature-highlight">
+            <div class="feature-highlight-inner">
+                <div class="feature-title">
+                    <i class="fas fa-brain"></i> Smart Data Management
+                </div>
+                <div class="feature-desc">
+                    The system intelligently manages test data:
+                    <ul style="margin: 0.5rem 0 0 1.5rem;">
+                        <li>✅ Uses provided email/password when specified</li>
+                        <li>🎲 Generates missing fields with Random Data</li>
+                        <li>❌ Fails gracefully when credentials missing</li>
+                        <li>📊 Clear reporting of data sources</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="requirements-section">
+            <i class="fas fa-exclamation-triangle"></i>
+            <strong>Important: </strong> For account creation without credentials (e.g., "create an account on linkedin"), 
+            you <strong>MUST</strong> enable "Use Random Data". Otherwise, the test will fail.
+        </div>
+
+        <div class="action-buttons">
+            <button type="button" class="btn btn-primary" onclick="runTest()">
+                <i class="fas fa-play-circle"></i> Run Smart Test
+            </button>
+            <button type="button" class="btn btn-secondary" onclick="resetForm()">
+                <i class="fas fa-redo"></i> Reset
+            </button>
+            <button type="button" class="btn btn-secondary" onclick="showTestModes()">
+                <i class="fas fa-question-circle"></i> Test Modes
+            </button>
+        </div>
+
+        <div class="examples-section">
+            <h4><i class="fas fa-flask"></i> Test Scenarios (Click to use):</h4>
+            
+            <div class="example-item" onclick="useExample(0)">
+                <div class="example-text">
+                    "signup on linkedin with email test@mail.com password test123"
+                    <span class="instruction-type type-provided">Provided Data</span>
+                </div>
+            </div>
+            
+            <div class="example-item" onclick="useExample(1)">
+                <div class="example-text">
+                    "create an account on linkedin"
+                    <span class="instruction-type type-random">Random Data</span>
+                </div>
+            </div>
+            
+            <div class="example-item" onclick="useExample(2)">
+                <div class="example-text">
+                    "search python on google"
+                    <span class="instruction-type type-provided">Simple Search</span>
+                </div>
+            </div>
+            
+            <div class="example-item" onclick="useExample(3)">
+                <div class="example-text">
+                    "search laptop on amazon and add to cart"
+                    <span class="instruction-type type-provided">No Login Needed</span>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div id="executionCard" class="execution-card">
+    <h3 style="color: #06B6D4; margin-bottom: 1.5rem;">
+        <i class="fas fa-tasks"></i> Execution Results
+    </h3>
+    
+    <div id="timelineContainer">
+        <!-- Results will be displayed here -->
+    </div>
+
+    <div class="result-actions">
+        <button class="btn btn-secondary" onclick="downloadCurrentReport('html')">
+            <i class="fas fa-download"></i> Download HTML Report
+        </button>
+        <button class="btn btn-primary" onclick="downloadCurrentReport('pdf')">
+            <i class="fas fa-file-pdf"></i> Download PDF Report
+        </button>
+        <a href="/reports" class="btn btn-primary" style="background: linear-gradient(135deg, #8B5CF6 0%, #06B6D4 100%);">
+            <i class="fas fa-history"></i> View All Reports
+        </a>
+        <button class="btn btn-secondary" onclick="runAnotherTest()">
+            <i class="fas fa-plus"></i> Run Another Test
+        </button>
+    </div>
+</div>
+
+<!-- Test Modes Modal -->
+<div id="testModesModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 1000; align-items: center; justify-content: center;">
+    <div style="background: rgba(15, 23, 42, 0.95); border-radius: 20px; padding: 2rem; max-width: 800px; width: 90%; border: 2px solid #06B6D4;">
+        <h3 style="color: #06B6D4; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.5rem;">
+            <i class="fas fa-cogs"></i> Test Mode Explanations
+        </h3>
+        
+        <div style="margin-bottom: 1.5rem;">
+            <h4 style="color: #E2E8F0; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem;">
+                <span class="instruction-type type-provided">Provided Data Mode</span>
+            </h4>
+            <p style="color: #94A3B8; margin-bottom: 1rem;">
+                ✅ All required credentials are provided in the instruction.
+                <br>Example: <code>"signup on linkedin with email test@mail.com password test123"</code>
+            </p>
+            
+            <h4 style="color: #E2E8F0; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem;">
+                <span class="instruction-type type-random">Random Data Mode</span>
+            </h4>
+            <p style="color: #94A3B8; margin-bottom: 1rem;">
+                🎲 No credentials provided, all fields generated automatically.
+                <br>Requires: <strong>Use Random Data</strong> checkbox enabled.
+                <br>Example: <code>"create an account on linkedin"</code>
+            </p>
+            
+            <h4 style="color: #E2E8F0; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem;">
+                <span class="instruction-type type-provided">Simple Search Mode</span>
+            </h4>
+            <p style="color: #94A3B8; margin-bottom: 1rem;">
+                🔍 No credentials needed, performs search operations.
+                <br>Example: <code>"search python on google"</code>
+            </p>
+        </div>
+        
+        <button onclick="closeTestModes()" class="btn btn-primary" style="width: 100%;">
+            <i class="fas fa-times"></i> Close
+        </button>
+    </div>
+</div>
+
+<script>
+// Global variables
+let testCount = 0;
+let passedCount = 0;
+let failedCount = 0;
+let currentReportId = null;
+let currentExecutionData = null;
+
+// UPDATED: Changed example 2 from problematic Twitter to working Google search
+const examples = [
+    "signup on linkedin with email test@mail.com password test123",
+    "create an account on linkedin",
+    "search python on google",
+    "search laptop on amazon and add to cart"
+];
+
+// UPDATED: Changed test mode description for example 2
+const testModes = {
+    0: { type: "provided", desc: "All credentials provided in instruction" },
+    1: { type: "random", desc: "No credentials - requires Random Data" },
+    2: { type: "provided", desc: "Simple search - no login needed" },
+    3: { type: "provided", desc: "No login needed" }
+};
+
+// Update test mode indicator
+function updateTestModeIndicator() {
+    const useRandomData = document.getElementById('useRandomData').checked;
+    const indicator = document.getElementById('testModeIndicator');
+    const statusSpan = document.getElementById('modeStatus');
+    
+    if (useRandomData) {
+        indicator.classList.add('active');
+        statusSpan.textContent = 'ON';
+        statusSpan.style.color = '#8B5CF6';
+    } else {
+        indicator.classList.remove('active');
+        statusSpan.textContent = 'OFF';
+        statusSpan.style.color = '#94A3B8';
+    }
+}
+
+// Use example
+function useExample(index) {
+    if (index >= 0 && index < examples.length) {
+        document.getElementById('instructionText').value = examples[index];
+        document.getElementById('instructionText').focus();
+        
+        // Auto-set Random Data for examples that need it
+        const mode = testModes[index];
+        if (mode.type === 'random') {
+            document.getElementById('useRandomData').checked = true;
+        } else {
+            document.getElementById('useRandomData').checked = false;
+        }
+        
+        updateTestModeIndicator();
+    }
+}
+
+// Show test modes modal
+function showTestModes() {
+    document.getElementById('testModesModal').style.display = 'flex';
+}
+
+// Close test modes modal
+function closeTestModes() {
+    document.getElementById('testModesModal').style.display = 'none';
+}
+
+// Reset form
+function resetForm() {
+    document.getElementById('instructionText').value = '';
+    document.getElementById('executionCard').classList.remove('show');
+    currentReportId = null;
+    currentExecutionData = null;
+    document.getElementById('instructionText').focus();
+}
+
+// Run another test
+function runAnotherTest() {
+    resetForm();
+}
+
+// Enhanced runTest function with smart data handling
+async function runTest() {
+    const instruction = document.getElementById('instructionText').value.trim();
+    const headless = document.getElementById('headlessMode').checked;
+    const useRandomData = document.getElementById('useRandomData').checked;
+
+    if (!instruction) {
+        alert('Please provide a test instruction');
+        document.getElementById('instructionText').focus();
+        return;
+    }
+
+    // Show execution card
+    document.getElementById('executionCard').classList.add('show');
+    document.getElementById('timelineContainer').innerHTML = `
+        <div class="loading-state">
+            <i class="fas fa-spinner"></i>
+            <p style="color: #94A3B8; margin-top: 1rem;">Analyzing instruction and preparing test...</p>
+            ${useRandomData ? 
+                '<p style="color: #8B5CF6; margin-top: 0.5rem;"><i class="fas fa-dice"></i> Random Data Mode: ENABLED</p>' : 
+                '<p style="color: #F59E0B; margin-top: 0.5rem;"><i class="fas fa-exclamation-triangle"></i> Random Data Mode: DISABLED</p>'
+            }
+            <p style="color: #94A3B8; font-size: 0.9rem; margin-top: 0.5rem;">Checking for required credentials...</p>
+        </div>
+    `;
+
+    try {
+        const response = await fetch('/api/run-test', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                instruction: instruction,
+                headless: headless,
+                use_random_data: useRandomData
+            })
+        });
+
+        const data = await response.json();
+        currentExecutionData = data;
+
+        if (data.success) {
+            currentReportId = data.report_id;
+            
+            // Display execution results
+            displayExecution(data);
+            
+            // Update statistics
+            updateStats(data);
+            
+            // Show success banner
+            showSuccessBanner(data);
+        } else {
+            displayError(data);
+        }
+    } catch (error) {
+        document.getElementById('timelineContainer').innerHTML = `
+            <div class="error-alert">
+                <strong>Connection Error:</strong> ${error.message}<br>
+                <p style="margin-top: 1rem;">Please check your internet connection and try again.</p>
+            </div>
+        `;
+    }
+}
+
+// Display execution results
+function displayExecution(data) {
+    const container = document.getElementById('timelineContainer');
+    container.innerHTML = '';
+
+    // Add data usage summary if available
+    if (data.data_usage) {
+        const summaryDiv = document.createElement('div');
+        summaryDiv.className = 'data-summary';
+        summaryDiv.innerHTML = `
+            <h5><i class="fas fa-database"></i> Data Usage Summary</h5>
+            <div class="data-summary-grid">
+                ${data.data_usage.provided && data.data_usage.provided.length > 0 ? `
+                    <div class="data-item">
+                        <div class="data-label">Provided Credentials</div>
+                        ${data.data_usage.provided.map(item => 
+                            `<div class="data-value">${item.field}: ${item.value}</div>`
+                        ).join('')}
+                    </div>
+                ` : ''}
+                ${data.data_usage.generated && data.data_usage.generated.length > 0 ? `
+                    <div class="data-item">
+                        <div class="data-label">Generated Data</div>
+                        ${data.data_usage.generated.map(item => 
+                            `<div class="data-value">${item.field}: ${item.value}</div>`
+                        ).join('')}
+                    </div>
+                ` : ''}
+            </div>
+        `;
+        container.appendChild(summaryDiv);
+    }
+
+    // Display execution steps
+    if (data.execution && data.execution.length > 0) {
+        let hasFailedSteps = false;
+        let hasWarningSteps = false;
+        
+        data.execution.forEach((step, index) => {
+            const item = document.createElement('div');
+            
+            // Check step status
+            if (step.status === 'Failed') {
+                item.className = 'timeline-item failed';
+                hasFailedSteps = true;
+            } else if (step.status === 'Warning') {
+                item.className = 'timeline-item warning';
+                hasWarningSteps = true;
+            } else {
+                item.className = 'timeline-item';
+            }
+            
+            let description = step.details || step.description || 'No description';
+            let dataSource = '';
+            
+            if (step.data_source === 'provided') {
+                dataSource = '<span class="data-usage-badge provided-data">Provided</span>';
+            } else if (step.data_source === 'generated') {
+                dataSource = '<span class="data-usage-badge generated-data">Generated</span>';
+            }
+            
+            if (step.field_type) {
+                description = `<strong>${step.field_type}:</strong> ${description} ${dataSource}`;
+            }
+            
+            item.innerHTML = `
+                <div class="timeline-header">
+                    <div class="timeline-action">Step ${index + 1}: ${step.action || 'Unknown'}</div>
+                    <div class="timeline-status ${step.status.toLowerCase()}">${step.status}</div>
+                </div>
+                <div class="timeline-description">${description}</div>
+            `;
+            container.appendChild(item);
+        });
+
+        // Determine final status
+        const finalStatus = hasFailedSteps ? 'Failed' : (hasWarningSteps ? 'Warning' : 'Passed');
+        
+        // Add final result summary
+        const summary = document.createElement('div');
+        if (finalStatus === 'Passed') {
+            summary.className = 'success-banner';
+            summary.innerHTML = `
+                <strong>✅ Test Completed Successfully!</strong>
+                <p style="margin-top: 0.5rem;">All ${data.execution.length} steps passed successfully.</p>
+                <p>Test ID: ${data.report_id || 'N/A'}</p>
+                ${data.data_usage ? 
+                    `<p style="margin-top: 0.5rem; font-size: 0.9rem;">
+                        <i class="fas fa-check-circle"></i> Used: 
+                        ${data.data_usage.provided && data.data_usage.provided.length > 0 ? 
+                            data.data_usage.provided.map(p => `${p.field}`).join(', ') + ' (provided)' : ''}
+                        ${data.data_usage.provided && data.data_usage.provided.length > 0 && data.data_usage.generated && data.data_usage.generated.length > 0 ? ' and ' : ''}
+                        ${data.data_usage.generated && data.data_usage.generated.length > 0 ? 
+                            data.data_usage.generated.map(g => `${g.field}`).join(', ') + ' (generated)' : ''}
+                    </p>` : ''
+                }
+            `;
+        } else if (finalStatus === 'Warning') {
+            summary.className = 'warning-banner';
+            summary.innerHTML = `
+                <strong>⚠️ Test Completed with Warnings</strong>
+                <p style="margin-top: 0.5rem;">${data.execution.length} steps executed with some warnings.</p>
+                <p>Test ID: ${data.report_id || 'N/A'}</p>
+            `;
+        } else {
+            summary.className = 'error-alert';
+            summary.innerHTML = `
+                <strong>❌ Test Failed</strong>
+                <p style="margin-top: 0.5rem;">${data.execution.length} steps executed with failures.</p>
+                <p>Test ID: ${data.report_id || 'N/A'}</p>
+            `;
+        }
+        container.appendChild(summary);
+    } else {
+        container.innerHTML = `
+            <div class="error-alert">
+                <strong>No Execution Data Available</strong>
+                <p style="margin-top: 0.5rem;">The test did not produce any execution steps.</p>
+            </div>
+        `;
+    }
+}
+
+// Show success banner with mode information
+function showSuccessBanner(data) {
+    const instruction = document.getElementById('instructionText').value.toLowerCase();
+    const useRandomData = document.getElementById('useRandomData').checked;
+    
+    let mode = '';
+    if (instruction.includes('email') && instruction.includes('password')) {
+        mode = 'Provided Data Mode';
+    } else if (useRandomData && !instruction.includes('email') && !instruction.includes('password')) {
+        mode = 'Random Data Mode';
+    } else {
+        mode = 'Simple Search Mode';
+    }
+    
+    if (mode) {
+        const banner = document.createElement('div');
+        banner.className = 'success-banner';
+        banner.innerHTML = `
+            <strong>🎯 ${mode}</strong>
+            <p style="margin-top: 0.5rem;">The test was executed using ${mode.toLowerCase()}</p>
+        `;
+        document.getElementById('timelineContainer').prepend(banner);
+    }
+}
+
+// Display error
+function displayError(data) {
+    const container = document.getElementById('timelineContainer');
+    
+    let errorHTML = `
+        <div class="error-alert">
+            <strong>❌ ${data.error || 'Test Failed'}</strong>
+    `;
+    
+    if (data.missing_fields && data.missing_fields.length > 0) {
+        errorHTML += `
+            <p style="margin-top: 0.5rem; color: #EF4444;"><strong>Missing Required Fields:</strong></p>
+            <ul>
+                ${data.missing_fields.map(f => `<li><strong>${f}</strong></li>`).join('')}
+            </ul>
+        `;
+    }
+    
+    if (data.suggestion) {
+        errorHTML += `
+            <div class="warning-banner" style="margin-top: 1rem;">
+                <strong>💡 Suggestion:</strong> ${data.suggestion}
+            </div>
+        `;
+    }
+    
+    const instruction = document.getElementById('instructionText').value.toLowerCase();
+    const useRandomData = document.getElementById('useRandomData').checked;
+    
+    if (instruction.includes('create') && instruction.includes('linkedin') && 
+        !instruction.includes('email') && !instruction.includes('password') && !useRandomData) {
+        errorHTML += `
+            <div class="warning-banner" style="margin-top: 1rem;">
+                <strong>🎲 LinkedIn Account Creation:</strong>
+                <p>For "create an account on linkedin" without providing credentials, you MUST enable "Use Random Data".</p>
+                <button onclick="enableRandomDataAndRetry()" class="btn btn-primary" style="margin-top: 0.5rem; padding: 0.5rem 1rem;">
+                    <i class="fas fa-dice"></i> Enable Random Data & Retry
+                </button>
+            </div>
+        `;
+    }
+    
+    errorHTML += `</div>`;
+    container.innerHTML = errorHTML;
+}
+
+// Enable random data and retry
+function enableRandomDataAndRetry() {
+    document.getElementById('useRandomData').checked = true;
+    updateTestModeIndicator();
+    runTest();
+}
+
+// Update statistics
+function updateStats(data) {
+    testCount++;
+    
+    let hasFailedSteps = false;
+    if (data.execution && data.execution.length > 0) {
+        hasFailedSteps = data.execution.some(step => step.status === 'Failed');
+    } else {
+        hasFailedSteps = !data.success;
+    }
+    
+    if (!hasFailedSteps) {
+        passedCount++;
+    } else {
+        failedCount++;
+    }
+
+    document.getElementById('totalTests').textContent = testCount;
+    document.getElementById('passedTests').textContent = passedCount;
+    document.getElementById('failedTests').textContent = failedCount;
+    
+    const rate = testCount > 0 ? Math.round((passedCount / testCount) * 100) : 0;
+    document.getElementById('successRate').textContent = rate + '%';
+}
+
+// Download report
+async function downloadCurrentReport(format) {
+    if (!currentReportId) {
+        alert('No test data available. Please run a test first.');
+        return;
+    }
+
+    try {
+        const response = await fetch(`/api/download-report/${format}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ report_id: currentReportId })
+        });
+
+        if (response.ok) {
+            const blob = await response.blob();
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `test_report_${currentReportId}.${format}`;
+            document.body.appendChild(a);
+            a.click();
+            window.URL.revokeObjectURL(url);
+            document.body.removeChild(a);
+        } else {
+            const error = await response.json();
+            alert('Failed to download report: ' + (error.error || 'Unknown error'));
+        }
+    } catch (error) {
+        alert('Error: ' + error.message);
+    }
+}
+
+// Initialize
+document.addEventListener('DOMContentLoaded', function() {
+    document.getElementById('instructionText').value = '';
+    document.getElementById('instructionText').focus();
+    
+    document.getElementById('useRandomData').addEventListener('change', updateTestModeIndicator);
+    
+    updateTestModeIndicator();
+    
+    document.getElementById('testModesModal').addEventListener('click', function(e) {
+        if (e.target === this) {
+            closeTestModes();
+        }
+    });
+});
+
+// Prevent form submission (using button click instead)
+document.getElementById('testForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    runTest();
+});
+</script>
+{% endblock %}
