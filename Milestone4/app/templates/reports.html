@@ -38,6 +38,12 @@
         padding: 1.5rem;
         border: 1px solid rgba(6, 182, 212, 0.2);
         text-align: center;
+        transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .summary-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(6, 182, 212, 0.2);
     }
 
     .summary-number {
@@ -59,11 +65,17 @@
         border-radius: 20px;
         padding: 2rem;
         border: 1px solid rgba(6, 182, 212, 0.2);
+        margin-bottom: 3rem;
+    }
+
+    .reports-table-container {
+        overflow-x: auto;
     }
 
     .reports-table {
         width: 100%;
         border-collapse: collapse;
+        min-width: 1000px;
     }
 
     .reports-table thead {
@@ -110,13 +122,24 @@
         color: #EF4444;
     }
 
+    .status-badge.warning {
+        background: rgba(245, 158, 11, 0.2);
+        color: #F59E0B;
+    }
+
+    .status-badge.info {
+        background: rgba(6, 182, 212, 0.2);
+        color: #06B6D4;
+    }
+
     .action-buttons {
         display: flex;
         gap: 0.5rem;
+        flex-wrap: wrap;
     }
 
     .btn-small {
-        padding: 0.5rem 1rem;
+        padding: 0.5rem 0.75rem;
         font-size: 0.875rem;
         border-radius: 6px;
         border: none;
@@ -126,33 +149,63 @@
         display: inline-flex;
         align-items: center;
         gap: 0.5rem;
+        white-space: nowrap;
+        font-family: inherit;
     }
 
     .btn-view {
         background: rgba(6, 182, 212, 0.2);
         color: #06B6D4;
+        border: 1px solid rgba(6, 182, 212, 0.3);
     }
 
     .btn-view:hover {
         background: rgba(6, 182, 212, 0.3);
+        transform: translateY(-2px);
     }
 
     .btn-download {
         background: rgba(139, 92, 246, 0.2);
         color: #8B5CF6;
+        border: 1px solid rgba(139, 92, 246, 0.3);
     }
 
     .btn-download:hover {
         background: rgba(139, 92, 246, 0.3);
+        transform: translateY(-2px);
     }
 
     .btn-delete {
         background: rgba(239, 68, 68, 0.2);
         color: #EF4444;
+        border: 1px solid rgba(239, 68, 68, 0.3);
     }
 
     .btn-delete:hover {
         background: rgba(239, 68, 68, 0.3);
+        transform: translateY(-2px);
+    }
+
+    .btn-json {
+        background: rgba(139, 92, 246, 0.2);
+        color: #8B5CF6;
+        border: 1px solid rgba(139, 92, 246, 0.3);
+    }
+
+    .btn-json:hover {
+        background: rgba(139, 92, 246, 0.3);
+        transform: translateY(-2px);
+    }
+
+    .btn-analysis {
+        background: rgba(16, 185, 129, 0.2);
+        color: #10B981;
+        border: 1px solid rgba(16, 185, 129, 0.3);
+    }
+
+    .btn-analysis:hover {
+        background: rgba(16, 185, 129, 0.3);
+        transform: translateY(-2px);
     }
 
     .empty-state {
@@ -196,26 +249,247 @@
         font-size: 1.1rem;
         margin-bottom: 0.5rem;
     }
+
+    /* Report ID styling */
+    .report-id {
+        font-family: 'Courier New', monospace;
+        font-size: 0.8rem;
+        color: #8B5CF6;
+        background: rgba(139, 92, 246, 0.1);
+        padding: 0.25rem 0.5rem;
+        border-radius: 4px;
+        display: inline-block;
+    }
+
+    /* Instruction column */
+    .instruction-cell {
+        max-width: 300px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .instruction-cell:hover {
+        overflow: visible;
+        white-space: normal;
+        position: relative;
+        z-index: 10;
+        background: rgba(15, 23, 42, 0.95);
+        padding: 0.5rem;
+        border-radius: 8px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    }
+
+    /* Table responsiveness */
+    @media (max-width: 1200px) {
+        .reports-table-container {
+            margin: 0 -1rem;
+            padding: 0 1rem;
+        }
+    }
+
+    /* Control buttons */
+    .control-buttons {
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+        margin-top: 2rem;
+        flex-wrap: wrap;
+    }
+
+    .control-btn {
+        padding: 0.75rem 1.5rem;
+        border-radius: 8px;
+        border: none;
+        cursor: pointer;
+        font-weight: 600;
+        transition: all 0.3s;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .control-btn-primary {
+        background: linear-gradient(135deg, #06B6D4 0%, #8B5CF6 100%);
+        color: white;
+    }
+
+    .control-btn-primary:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 25px rgba(6, 182, 212, 0.4);
+    }
+
+    .control-btn-secondary {
+        background: rgba(6, 182, 212, 0.1);
+        color: #06B6D4;
+        border: 2px solid #06B6D4;
+    }
+
+    .control-btn-secondary:hover {
+        background: rgba(6, 182, 212, 0.2);
+        transform: translateY(-3px);
+    }
+
+    /* Loading state */
+    .loading-state {
+        text-align: center;
+        padding: 3rem;
+        color: #94A3B8;
+    }
+
+    .loading-spinner {
+        display: inline-block;
+        width: 40px;
+        height: 40px;
+        border: 4px solid rgba(6, 182, 212, 0.3);
+        border-radius: 50%;
+        border-top-color: #06B6D4;
+        animation: spin 1s linear infinite;
+        margin-bottom: 1rem;
+    }
+
+    @keyframes spin {
+        to { transform: rotate(360deg); }
+    }
+
+    /* Toast notifications */
+    .toast {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        padding: 1rem 1.5rem;
+        border-radius: 8px;
+        color: white;
+        font-weight: 600;
+        z-index: 9999;
+        animation: slideIn 0.3s ease;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    .toast.success {
+        background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+    }
+
+    .toast.error {
+        background: linear-gradient(135deg, #EF4444 0%, #DC2626 100%);
+    }
+
+    .toast.info {
+        background: linear-gradient(135deg, #06B6D4 0%, #0891B2 100%);
+    }
+
+    @keyframes slideIn {
+        from {
+            transform: translateX(100%);
+            opacity: 0;
+        }
+        to {
+            transform: translateX(0);
+            opacity: 1;
+        }
+    }
+
+    @keyframes slideOut {
+        from {
+            transform: translateX(0);
+            opacity: 1;
+        }
+        to {
+            transform: translateX(100%);
+            opacity: 0;
+        }
+    }
+
+    /* Filter controls */
+    .filter-controls {
+        display: flex;
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+        flex-wrap: wrap;
+        align-items: center;
+    }
+
+    .filter-select {
+        background: rgba(15, 23, 42, 0.8);
+        border: 1px solid rgba(6, 182, 212, 0.3);
+        border-radius: 8px;
+        padding: 0.5rem 1rem;
+        color: #E2E8F0;
+        font-size: 0.9rem;
+        min-width: 150px;
+    }
+
+    .filter-select:focus {
+        outline: none;
+        border-color: #06B6D4;
+        box-shadow: 0 0 0 3px rgba(6, 182, 212, 0.1);
+    }
+
+    .search-box {
+        flex: 1;
+        min-width: 200px;
+        background: rgba(15, 23, 42, 0.8);
+        border: 1px solid rgba(6, 182, 212, 0.3);
+        border-radius: 8px;
+        padding: 0.5rem 1rem;
+        color: #E2E8F0;
+        font-size: 0.9rem;
+    }
+
+    .search-box:focus {
+        outline: none;
+        border-color: #06B6D4;
+        box-shadow: 0 0 0 3px rgba(6, 182, 212, 0.1);
+    }
+
+    /* Test count badges */
+    .test-count {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.25rem 0.75rem;
+        border-radius: 12px;
+        font-size: 0.8rem;
+        font-weight: 600;
+    }
+
+    .test-count.passed {
+        background: rgba(16, 185, 129, 0.2);
+        color: #10B981;
+    }
+
+    .test-count.failed {
+        background: rgba(239, 68, 68, 0.2);
+        color: #EF4444;
+    }
+
+    .test-count.total {
+        background: rgba(6, 182, 212, 0.2);
+        color: #06B6D4;
+    }
 </style>
 {% endblock %}
 
 {% block content %}
 <section class="reports-header">
     <h1>Test Reports</h1>
-    <p>View and analyze your test execution history</p>
+    <p>View and analyze all your test execution history</p>
 </section>
 
 {% if not logged_in %}
 <div class="guest-warning">
     <i class="fas fa-exclamation-triangle"></i>
-    <strong>⚠️ Guest Mode - Temporary Storage</strong>
+    <strong>⚠️ Guest Mode - Session Storage</strong>
     <p style="margin: 0.5rem 0;">
-        Your reports are stored in memory only and will be lost when you:
+        Your reports are stored in browser session and will be lost when you:
     </p>
-    <ul style="list-style: none; padding: 0; margin: 0.5rem 0;">
+    <ul style="list-style: none; padding: 0; margin: 0.5rem 0; text-align: left; display: inline-block;">
         <li>• Close this browser tab</li>
-        <li>• Refresh the page</li>
         <li>• Clear browser data</li>
+        <li>• Start a new session</li>
     </ul>
     <p style="margin-top: 1rem;">
         <strong>Want to save your reports permanently?</strong>
@@ -224,148 +498,550 @@
 </div>
 {% endif %}
 
-{% if reports %}
 <!-- Statistics Summary -->
 <div class="stats-summary">
     <div class="summary-card">
-        <div class="summary-number">{{ reports|length }}</div>
+        <div class="summary-number" id="totalReports">{{ reports|length }}</div>
         <div class="summary-label">
             {% if logged_in %}
             Total Reports
             {% else %}
-            Reports (Session)
+            Session Reports
             {% endif %}
         </div>
     </div>
     <div class="summary-card">
-        <div class="summary-number">{{ reports|selectattr('status', 'equalto', 'PASSED')|list|length }}</div>
+        <div class="summary-number" id="passedReports">{{ passed_count }}</div>
         <div class="summary-label">Passed Tests</div>
     </div>
     <div class="summary-card">
-        <div class="summary-number">{{ reports|selectattr('status', 'equalto', 'FAILED')|list|length }}</div>
+        <div class="summary-number" id="failedReports">{{ failed_count }}</div>
         <div class="summary-label">Failed Tests</div>
     </div>
     <div class="summary-card">
-        <div class="summary-number">
-            {% set total = reports|length %}
-            {% set passed = reports|selectattr('status', 'equalto', 'PASSED')|list|length %}
-            {{ (passed / total * 100)|round|int if total > 0 else 0 }}%
+        <div class="summary-number" id="successRate">
+            {% if reports|length > 0 %}
+                {{ (passed_count / reports|length * 100)|round|int }}%
+            {% else %}
+                0%
+            {% endif %}
         </div>
         <div class="summary-label">Success Rate</div>
     </div>
 </div>
 
-<!-- Reports Table -->
+<!-- Filter Controls -->
 <div class="reports-container">
-    <h2 style="color: #06B6D4; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.5rem;">
-        <i class="fas fa-history"></i> 
-        {% if logged_in %}
-        All Test Reports
+    <div class="filter-controls">
+        <select id="statusFilter" class="filter-select">
+            <option value="all">All Status</option>
+            <option value="PASSED">Passed Only</option>
+            <option value="FAILED">Failed Only</option>
+            <option value="WARNING">Warning Only</option>
+        </select>
+        
+        <select id="sortFilter" class="filter-select">
+            <option value="newest">Newest First</option>
+            <option value="oldest">Oldest First</option>
+            <option value="passed">Passed First</option>
+            <option value="failed">Failed First</option>
+        </select>
+        
+        <input type="text" id="searchInput" class="search-box" placeholder="Search reports...">
+        
+        <div style="margin-left: auto;">
+            <span class="test-count total">
+                <i class="fas fa-file-alt"></i> {{ reports|length }} reports
+            </span>
+            {% if passed_count > 0 %}
+            <span class="test-count passed" style="margin-left: 0.5rem;">
+                <i class="fas fa-check-circle"></i> {{ passed_count }} passed
+            </span>
+            {% endif %}
+            {% if failed_count > 0 %}
+            <span class="test-count failed" style="margin-left: 0.5rem;">
+                <i class="fas fa-times-circle"></i> {{ failed_count }} failed
+            </span>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="reports-table-container">
+        {% if reports %}
+        <table class="reports-table" id="reportsTable">
+            <thead>
+                <tr>
+                    <th>Report ID</th>
+                    <th>Test Instruction</th>
+                    <th>Steps</th>
+                    <th>Success Rate</th>
+                    <th>Status</th>
+                    <th>Date</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="reportsTableBody">
+                {% for report in reports %}
+                <tr class="report-row" 
+                    data-report-id="{{ report.report_id }}"
+                    data-status="{{ report.status }}"
+                    data-date="{{ report.created_at if report.created_at else '' }}"
+                    data-success-rate="{{ report.success_rate if report.success_rate else 0 }}">
+                    <td>
+                        <div class="report-id" title="{{ report.report_id }}">
+                            {{ report.report_id[:15] }}...
+                        </div>
+                    </td>
+                    <td class="instruction-cell" title="{{ report.instruction }}">
+                        {{ report.instruction[:60] }}{% if report.instruction|length > 60 %}...{% endif %}
+                    </td>
+                    <td>
+                        <div style="display: flex; align-items: center; gap: 0.25rem;">
+                            <span style="color: #10B981; font-weight: 600;">{{ report.passed_steps if report.passed_steps else 0 }}</span>
+                            <span style="color: #94A3B8;">/</span>
+                            <span style="color: #94A3B8;">{{ report.total_steps if report.total_steps else 0 }}</span>
+                        </div>
+                    </td>
+                    <td>
+                        {% if report.success_rate %}
+                            {{ report.success_rate|round|int }}%
+                        {% else %}
+                            0%
+                        {% endif %}
+                    </td>
+                    <td>
+                        <span class="status-badge {{ report.status.lower() if report.status else 'info' }}">
+                            {{ report.status if report.status else 'UNKNOWN' }}
+                        </span>
+                    </td>
+                    <td style="color: #94A3B8; font-size: 0.875rem;">
+                        {{ report.created_at if report.created_at else 'N/A' }}
+                    </td>
+                    <td>
+                        <div class="action-buttons">
+                            <a href="/reports/{{ report.report_id }}" class="btn-small btn-view" title="View Detailed Report">
+                                <i class="fas fa-eye"></i> View
+                            </a>
+                            <button class="btn-small btn-download" onclick="downloadReport('{{ report.report_id }}', 'html')" title="Download HTML Report">
+                                <i class="fas fa-download"></i> HTML
+                            </button>
+                            <button class="btn-small btn-json" onclick="downloadJSONReport('{{ report.report_id }}')" title="Download JSON Report">
+                                <i class="fas fa-file-code"></i> JSON
+                            </button>
+                            <button class="btn-small btn-analysis" onclick="downloadAnalysisReport('{{ report.report_id }}')" title="Download Analysis Report">
+                                <i class="fas fa-chart-bar"></i> Analysis
+                            </button>
+                            <button class="btn-small btn-delete" onclick="deleteReport('{{ report.report_id }}')" title="Delete Report">
+                                <i class="fas fa-trash"></i> Delete
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
         {% else %}
-        Current Session Reports
+        <!-- Empty State -->
+        <div class="empty-state">
+            <i class="fas fa-file-alt"></i>
+            <h2>No Reports Yet</h2>
+            <p>
+                {% if logged_in %}
+                Run tests from the dashboard to generate and save reports permanently
+                {% else %}
+                Run tests from the dashboard to generate reports for this session
+                {% endif %}
+            </p>
+            <a href="/dashboard" class="btn btn-primary">
+                <i class="fas fa-plus-circle"></i> Create First Test
+            </a>
+        </div>
         {% endif %}
-    </h2>
-    
-    <table class="reports-table">
-        <thead>
-            <tr>
-                <th>Report ID</th>
-                <th>Test Instruction</th>
-                <th>Steps</th>
-                <th>Success Rate</th>
-                <th>Status</th>
-                <th>Date</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for report in reports %}
-            <tr id="report-row-{{ report.report_id }}">
-                <td><code style="color: #8B5CF6;">{{ report.report_id }}</code></td>
-                <td style="max-width: 300px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
-                    {{ report.instruction }}
-                </td>
-                <td>
-                    <span style="color: #10B981;">{{ report.passed_steps }}</span> / 
-                    <span style="color: #94A3B8;">{{ report.total_steps }}</span>
-                </td>
-                <td>{{ report.success_rate|round|int }}%</td>
-                <td>
-                    <span class="status-badge {{ report.status.lower() }}">
-                        {{ report.status }}
-                    </span>
-                </td>
-                <td style="color: #94A3B8; font-size: 0.875rem;">
-                    {{ report.created_at }}
-                </td>
-                <td>
-                    <div class="action-buttons">
-                        <a href="/reports/{{ report.report_id }}" class="btn-small btn-view">
-                            <i class="fas fa-eye"></i> View
-                        </a>
-                        <button class="btn-small btn-download" onclick="downloadReport('{{ report.report_id }}', 'html')">
-                            <i class="fas fa-download"></i> HTML
-                        </button>
-                        <button class="btn-small btn-delete" onclick="deleteReport('{{ report.report_id }}')">
-                            <i class="fas fa-trash"></i> Delete
-                        </button>
-                    </div>
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+    </div>
 </div>
 
-{% else %}
-<!-- Empty State -->
-<div class="reports-container">
-    <div class="empty-state">
-        <i class="fas fa-file-alt"></i>
-        <h2>No Reports Yet</h2>
-        <p>
-            {% if logged_in %}
-            Run tests from the dashboard to generate and save reports permanently
-            {% else %}
-            Run tests from the dashboard to generate reports for this session
-            {% endif %}
-        </p>
-        <a href="/dashboard" class="btn btn-primary">
-            <i class="fas fa-plus-circle"></i> Create First Test
-        </a>
-    </div>
+<!-- Control Buttons -->
+{% if reports %}
+<div class="control-buttons">
+    <button class="control-btn control-btn-primary" onclick="downloadAllReports()">
+        <i class="fas fa-file-archive"></i> Download All Reports (ZIP)
+    </button>
+    <button class="control-btn control-btn-secondary" onclick="clearAllReports()">
+        <i class="fas fa-trash-alt"></i> Clear All Reports
+    </button>
+    <a href="/dashboard" class="control-btn control-btn-primary">
+        <i class="fas fa-plus-circle"></i> Run New Test
+    </a>
 </div>
 {% endif %}
 
 <script>
+// Global variables
+let allReports = {{ reports|tojson|safe }};
+let filteredReports = [...allReports];
+
+// Initialize page
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('Reports page loaded with', allReports.length, 'reports');
+    
+    // Update filter counts
+    updateFilterCounts();
+    
+    // Set up event listeners
+    document.getElementById('statusFilter').addEventListener('change', filterReports);
+    document.getElementById('sortFilter').addEventListener('change', sortReports);
+    document.getElementById('searchInput').addEventListener('input', searchReports);
+    
+    // Show welcome message if first time
+    if (allReports.length > 0 && !sessionStorage.getItem('reportsPageVisited')) {
+        showToast(`Welcome! Showing ${allReports.length} test reports`, 'info');
+        sessionStorage.setItem('reportsPageVisited', 'true');
+    }
+});
+
+// Update filter counts
+function updateFilterCounts() {
+    const passedCount = allReports.filter(r => r.status === 'PASSED').length;
+    const failedCount = allReports.filter(r => r.status === 'FAILED').length;
+    
+    // Update counter badges
+    document.getElementById('passedReports').textContent = passedCount;
+    document.getElementById('failedReports').textContent = failedCount;
+    document.getElementById('totalReports').textContent = allReports.length;
+    
+    // Update success rate
+    const successRate = allReports.length > 0 ? Math.round((passedCount / allReports.length) * 100) : 0;
+    document.getElementById('successRate').textContent = successRate + '%';
+}
+
+// Filter reports by status
+function filterReports() {
+    const statusFilter = document.getElementById('statusFilter').value;
+    const searchQuery = document.getElementById('searchInput').value.toLowerCase();
+    
+    filteredReports = allReports.filter(report => {
+        // Filter by status
+        if (statusFilter !== 'all' && report.status !== statusFilter) {
+            return false;
+        }
+        
+        // Filter by search query
+        if (searchQuery) {
+            const instruction = (report.instruction || '').toLowerCase();
+            const reportId = (report.report_id || '').toLowerCase();
+            return instruction.includes(searchQuery) || reportId.includes(searchQuery);
+        }
+        
+        return true;
+    });
+    
+    renderReports();
+}
+
+// Sort reports
+function sortReports() {
+    const sortBy = document.getElementById('sortFilter').value;
+    
+    filteredReports.sort((a, b) => {
+        switch(sortBy) {
+            case 'newest':
+                return new Date(b.created_at || 0) - new Date(a.created_at || 0);
+            case 'oldest':
+                return new Date(a.created_at || 0) - new Date(b.created_at || 0);
+            case 'passed':
+                if (a.status === 'PASSED' && b.status !== 'PASSED') return -1;
+                if (a.status !== 'PASSED' && b.status === 'PASSED') return 1;
+                return new Date(b.created_at || 0) - new Date(a.created_at || 0);
+            case 'failed':
+                if (a.status === 'FAILED' && b.status !== 'FAILED') return -1;
+                if (a.status !== 'FAILED' && b.status === 'FAILED') return 1;
+                return new Date(b.created_at || 0) - new Date(a.created_at || 0);
+            default:
+                return new Date(b.created_at || 0) - new Date(a.created_at || 0);
+        }
+    });
+    
+    renderReports();
+}
+
+// Search reports
+function searchReports() {
+    filterReports();
+}
+
+// Render reports to table
+function renderReports() {
+    const tbody = document.getElementById('reportsTableBody');
+    
+    if (filteredReports.length === 0) {
+        tbody.innerHTML = `
+            <tr>
+                <td colspan="7" style="text-align: center; padding: 3rem; color: #94A3B8;">
+                    <i class="fas fa-search" style="font-size: 2rem; margin-bottom: 1rem;"></i>
+                    <p>No reports match your filters</p>
+                    <button class="btn-small" onclick="clearFilters()" style="margin-top: 1rem;">
+                        Clear Filters
+                    </button>
+                </td>
+            </tr>
+        `;
+        return;
+    }
+    
+    tbody.innerHTML = filteredReports.map(report => `
+        <tr class="report-row" 
+            data-report-id="${report.report_id}"
+            data-status="${report.status || ''}"
+            data-date="${report.created_at || ''}"
+            data-success-rate="${report.success_rate || 0}">
+            <td>
+                <div class="report-id" title="${report.report_id}">
+                    ${report.report_id.substring(0, 15)}...
+                </div>
+            </td>
+            <td class="instruction-cell" title="${report.instruction || 'No instruction'}">
+                ${(report.instruction || '').substring(0, 60)}${(report.instruction || '').length > 60 ? '...' : ''}
+            </td>
+            <td>
+                <div style="display: flex; align-items: center; gap: 0.25rem;">
+                    <span style="color: #10B981; font-weight: 600;">${report.passed_steps || 0}</span>
+                    <span style="color: #94A3B8;">/</span>
+                    <span style="color: #94A3B8;">${report.total_steps || 0}</span>
+                </div>
+            </td>
+            <td>
+                ${report.success_rate ? Math.round(report.success_rate) + '%' : '0%'}
+            </td>
+            <td>
+                <span class="status-badge ${(report.status || 'info').toLowerCase()}">
+                    ${report.status || 'UNKNOWN'}
+                </span>
+            </td>
+            <td style="color: #94A3B8; font-size: 0.875rem;">
+                ${report.created_at || 'N/A'}
+            </td>
+            <td>
+                <div class="action-buttons">
+                    <a href="/reports/${report.report_id}" class="btn-small btn-view" title="View Detailed Report">
+                        <i class="fas fa-eye"></i> View
+                    </a>
+                    <button class="btn-small btn-download" onclick="downloadReport('${report.report_id}', 'html')" title="Download HTML Report">
+                        <i class="fas fa-download"></i> HTML
+                    </button>
+                    <button class="btn-small btn-json" onclick="downloadJSONReport('${report.report_id}')" title="Download JSON Report">
+                        <i class="fas fa-file-code"></i> JSON
+                    </button>
+                    <button class="btn-small btn-analysis" onclick="downloadAnalysisReport('${report.report_id}')" title="Download Analysis Report">
+                        <i class="fas fa-chart-bar"></i> Analysis
+                    </button>
+                    <button class="btn-small btn-delete" onclick="deleteReport('${report.report_id}')" title="Delete Report">
+                        <i class="fas fa-trash"></i> Delete
+                    </button>
+                </div>
+            </td>
+        </tr>
+    `).join('');
+}
+
+// Clear all filters
+function clearFilters() {
+    document.getElementById('statusFilter').value = 'all';
+    document.getElementById('sortFilter').value = 'newest';
+    document.getElementById('searchInput').value = '';
+    filteredReports = [...allReports];
+    renderReports();
+    showToast('Filters cleared', 'info');
+}
+
+// Download report
 async function downloadReport(reportId, format) {
     try {
-        const response = await fetch(`/api/download-report/${format}`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ report_id: reportId })
-        });
-
-        if (response.ok) {
-            const blob = await response.blob();
-            const url = window.URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `${reportId}.${format}`;
-            document.body.appendChild(a);
-            a.click();
-            window.URL.revokeObjectURL(url);
-            document.body.removeChild(a);
-        } else {
-            alert('Failed to download report');
+        showToast(`Downloading ${format.toUpperCase()} report...`, 'info');
+        
+        // CORRECT: Use the proper API endpoint
+        const url = `/api/download-report/${reportId}/${format}`;
+        console.log(`Downloading report: ${url}`);
+        
+        // Method 1: Create anchor element for download
+        const a = document.createElement('a');
+        a.href = url;
+        
+        // Set proper filename based on format
+        let filename = `report_${reportId}`;
+        switch(format) {
+            case 'html':
+                filename += '.html';
+                break;
+            case 'pdf':
+                filename += '.pdf';
+                break;
+            case 'analysis':
+                filename = `analysis_report_${reportId}.pdf`;
+                break;
+            case 'json':
+                filename += '.json';
+                break;
+            default:
+                filename += `.${format}`;
         }
+        a.download = filename;
+        a.style.display = 'none';
+        document.body.appendChild(a);
+        
+        // Trigger download
+        a.click();
+        
+        // Clean up
+        setTimeout(() => {
+            document.body.removeChild(a);
+            showToast(`${format.toUpperCase()} report download started!`, 'success');
+        }, 100);
+        
     } catch (error) {
-        alert('Error: ' + error.message);
+        console.error('Download error:', error);
+        showToast(`Failed to download ${format}: ${error.message}`, 'error');
+        
+        // Fallback: Try direct window location
+        try {
+            window.location.href = `/api/download-report/${reportId}/${format}`;
+        } catch (fallbackError) {
+            console.error('Fallback also failed:', fallbackError);
+        }
     }
 }
 
+// Download JSON report
+async function downloadJSONReport(reportId) {
+    try {
+        showToast('Downloading JSON report...', 'info');
+        
+        // CORRECT: Use the direct download endpoint first
+        const url = `/api/download-report/${reportId}/json`;
+        
+        // Try fetch first to check if file exists
+        try {
+            const response = await fetch(url);
+            if (response.ok) {
+                // Direct download
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `report_${reportId}.json`;
+                a.style.display = 'none';
+                document.body.appendChild(a);
+                a.click();
+                
+                setTimeout(() => {
+                    document.body.removeChild(a);
+                    showToast('JSON report download started!', 'success');
+                }, 100);
+                return;
+            }
+        } catch (fetchError) {
+            console.log('Direct fetch failed, trying generate endpoint:', fetchError);
+        }
+        
+        // Fallback to generate endpoint
+        const response = await fetch(`/api/generate-json-report/${reportId}`);
+        const data = await response.json();
+
+        if (data.success) {
+            // Download the JSON file
+            const a = document.createElement('a');
+            a.href = data.download_url || `/api/download-report/${reportId}/json`;
+            a.download = `report_${reportId}.json`;
+            a.style.display = 'none';
+            document.body.appendChild(a);
+            a.click();
+            
+            setTimeout(() => {
+                document.body.removeChild(a);
+                showToast('JSON report downloaded!', 'success');
+            }, 100);
+        } else {
+            showToast(`Error: ${data.error || 'Failed to generate JSON report'}`, 'error');
+        }
+    } catch (error) {
+        console.error('JSON download error:', error);
+        showToast(`Error: ${error.message}`, 'error');
+        
+        // Final fallback
+        try {
+            window.location.href = `/api/download-report/${reportId}/json`;
+        } catch (finalError) {
+            console.error('Final fallback failed:', finalError);
+        }
+    }
+}
+
+// Download analysis report
+async function downloadAnalysisReport(reportId) {
+    try {
+        showToast('Downloading analysis report...', 'info');
+        
+        // CORRECT: Use proper analysis endpoint
+        const url = `/api/download-report/${reportId}/analysis`;
+        
+        // Direct download method
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `analysis_report_${reportId}.pdf`;
+        a.style.display = 'none';
+        document.body.appendChild(a);
+        a.click();
+        
+        setTimeout(() => {
+            document.body.removeChild(a);
+            showToast('Analysis report download started!', 'success');
+        }, 100);
+        
+    } catch (error) {
+        console.error('Analysis download error:', error);
+        showToast(`Error: ${error.message}`, 'error');
+        
+        // Fallback
+        try {
+            window.location.href = `/api/download-report/${reportId}/analysis`;
+        } catch (fallbackError) {
+            console.error('Fallback also failed:', fallbackError);
+        }
+    }
+}
+
+// Helper function to download HTML reports
+async function downloadHTMLReport(reportId) {
+    await downloadReport(reportId, 'html');
+}
+
+// Helper function to download PDF reports
+async function downloadPDFReport(reportId) {
+    await downloadReport(reportId, 'pdf');
+}
+
+// Helper function to download JSON-PDF reports
+async function downloadJSONPDFReport(reportId) {
+    try {
+        showToast('Downloading JSON as PDF...', 'info');
+        
+        const url = `/api/download-report/${reportId}/json-pdf`;
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `json_report_${reportId}.pdf`;
+        a.style.display = 'none';
+        document.body.appendChild(a);
+        a.click();
+        
+        setTimeout(() => {
+            document.body.removeChild(a);
+            showToast('JSON-PDF report download started!', 'success');
+        }, 100);
+        
+    } catch (error) {
+        console.error('JSON-PDF download error:', error);
+        showToast(`Error: ${error.message}`, 'error');
+    }
+}
+
+// Delete a report
 async function deleteReport(reportId) {
     if (!confirm('Are you sure you want to delete this report? This action cannot be undone.')) {
         return;
@@ -382,41 +1058,175 @@ async function deleteReport(reportId) {
         const data = await response.json();
 
         if (data.success) {
-            const row = document.getElementById(`report-row-${reportId}`);
-            row.style.transition = 'all 0.3s';
-            row.style.opacity = '0';
-            row.style.transform = 'translateX(-20px)';
+            // Remove from local arrays
+            allReports = allReports.filter(r => r.report_id !== reportId);
+            filteredReports = filteredReports.filter(r => r.report_id !== reportId);
             
-            setTimeout(() => {
-                row.remove();
+            // Remove from table
+            const row = document.querySelector(`[data-report-id="${reportId}"]`);
+            if (row) {
+                row.style.transition = 'all 0.3s';
+                row.style.opacity = '0';
+                row.style.transform = 'translateX(-20px)';
                 
-                const tbody = document.querySelector('.reports-table tbody');
-                if (tbody.children.length === 0) {
-                    location.reload();
-                }
-            }, 300);
+                setTimeout(() => {
+                    renderReports();
+                    updateFilterCounts();
+                    
+                    // Show empty state if no reports left
+                    if (allReports.length === 0) {
+                        location.reload();
+                    }
+                }, 300);
+            }
 
-            const toast = document.createElement('div');
-            toast.style.cssText = `
-                position: fixed; top: 20px; right: 20px;
-                background: rgba(16, 185, 129, 0.9); color: white;
-                padding: 1rem 2rem; border-radius: 8px;
-                box-shadow: 0 10px 25px rgba(0,0,0,0.3); z-index: 9999;
-            `;
-            toast.innerHTML = '<i class="fas fa-check-circle"></i> Report deleted';
-            document.body.appendChild(toast);
-
-            setTimeout(() => {
-                toast.style.transition = 'opacity 0.3s';
-                toast.style.opacity = '0';
-                setTimeout(() => toast.remove(), 300);
-            }, 2000);
+            showToast('Report deleted successfully!', 'success');
         } else {
-            alert('Failed to delete: ' + data.error);
+            showToast(`Failed to delete: ${data.error}`, 'error');
         }
     } catch (error) {
-        alert('Error: ' + error.message);
+        showToast(`Error: ${error.message}`, 'error');
     }
 }
+
+// Download all reports as ZIP
+async function downloadAllReports() {
+    if (allReports.length === 0) {
+        showToast('No reports to download', 'error');
+        return;
+    }
+
+    try {
+        showToast(`Creating ZIP with ${allReports.length} reports...`, 'info');
+        
+        // For now, just download the first report as example
+        // In a real implementation, you would create a ZIP on the server
+        if (allReports.length > 0) {
+            const reportId = allReports[0].report_id;
+            downloadReport(reportId, 'html');
+            
+            // Show info about multiple reports
+            if (allReports.length > 1) {
+                setTimeout(() => {
+                    showToast(`Downloaded first report. ${allReports.length - 1} more available.`, 'info');
+                }, 1000);
+            }
+        }
+    } catch (error) {
+        showToast(`Error: ${error.message}`, 'error');
+    }
+}
+
+// Clear all reports
+async function clearAllReports() {
+    if (allReports.length === 0) {
+        return;
+    }
+
+    if (!confirm(`Are you sure you want to delete ALL ${allReports.length} reports? This action cannot be undone.`)) {
+        return;
+    }
+
+    try {
+        showToast('Clearing all reports...', 'info');
+        
+        // Delete reports one by one
+        for (const report of [...allReports]) {
+            await fetch(`/api/delete-report/${report.report_id}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+        }
+        
+        // Clear local arrays
+        allReports = [];
+        filteredReports = [];
+        
+        // Reload page
+        location.reload();
+        
+    } catch (error) {
+        showToast(`Error: ${error.message}`, 'error');
+    }
+}
+
+// Toast notification system
+function showToast(message, type = 'info') {
+    // Remove existing toasts
+    document.querySelectorAll('.toast').forEach(toast => {
+        toast.style.animation = 'slideOut 0.3s ease forwards';
+        setTimeout(() => toast.remove(), 300);
+    });
+
+    const toast = document.createElement('div');
+    toast.className = `toast ${type}`;
+    
+    let icon = 'fas fa-info-circle';
+    if (type === 'success') icon = 'fas fa-check-circle';
+    if (type === 'error') icon = 'fas fa-exclamation-circle';
+    
+    toast.innerHTML = `<i class="${icon}"></i> ${message}`;
+    document.body.appendChild(toast);
+    
+    // Auto remove after 4 seconds
+    setTimeout(() => {
+        if (toast.parentNode) {
+            toast.style.animation = 'slideOut 0.3s ease forwards';
+            setTimeout(() => toast.remove(), 300);
+        }
+    }, 4000);
+}
+
+// Add CSS animations if not present
+if (!document.querySelector('#toast-animations')) {
+    const style = document.createElement('style');
+    style.id = 'toast-animations';
+    style.textContent = `
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+        
+        @keyframes slideOut {
+            from {
+                transform: translateX(0);
+                opacity: 1;
+            }
+            to {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+        }
+    `;
+    document.head.appendChild(style);
+}
+
+// Sync with server on page load
+window.addEventListener('load', function() {
+    // Optional: Refresh reports from server
+    setTimeout(() => {
+        fetch('/api/sync-dashboard-reports', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                console.log('Reports synced with server:', data.count, 'reports');
+            }
+        })
+        .catch(error => console.error('Sync error:', error));
+    }, 500);
+});
 </script>
 {% endblock %}

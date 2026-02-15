@@ -4,215 +4,764 @@
 
 {% block extra_css %}
 <style>
+    /* ===== GLOBAL STYLES ===== */
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        background: #0B1120;
+    }
+
     .report-container {
-        max-width: 1200px;
+        max-width: 1440px;
         margin: 0 auto;
-    }
-
-    .report-header {
-        background: rgba(30, 41, 59, 0.4);
-        border-radius: 20px;
         padding: 2rem;
-        border: 1px solid rgba(6, 182, 212, 0.2);
+    }
+
+    /* ===== HEADER SECTION ===== */
+    .report-header {
+        background: linear-gradient(135deg, #1E293B 0%, #0F172A 100%);
+        color: white;
+        padding: 2rem 2.5rem;
+        border-radius: 16px;
         margin-bottom: 2rem;
+        box-shadow: 0 20px 30px -10px rgba(0, 0, 0, 0.5);
+        position: relative;
+        overflow: hidden;
+        border: 1px solid rgba(255, 255, 255, 0.05);
     }
 
-    .report-title {
+    .report-header::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        right: -50%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(circle, rgba(56, 189, 248, 0.1) 0%, transparent 70%);
+        animation: rotate 25s linear infinite;
+    }
+
+    @keyframes rotate {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+    }
+
+    .report-header h1 {
+        font-size: 2.25rem;
+        margin-bottom: 0.5rem;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+        position: relative;
+        z-index: 1;
         display: flex;
-        justify-content: space-between;
         align-items: center;
-        margin-bottom: 1.5rem;
+        gap: 0.75rem;
     }
 
-    .report-title h1 {
+    .report-header h1 i {
+        color: #38BDF8;
         font-size: 2rem;
-        background: linear-gradient(135deg, #06B6D4 0%, #8B5CF6 100%);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
     }
 
-    .download-buttons {
+    .report-header p {
+        color: #94A3B8;
+        margin-bottom: 1.25rem;
+        font-size: 1rem;
+        position: relative;
+        z-index: 1;
         display: flex;
-        gap: 1rem;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .report-header p i {
+        color: #38BDF8;
     }
 
     .report-meta {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-        gap: 1rem;
-        color: #94A3B8;
+        display: flex;
+        gap: 1.5rem;
+        margin-top: 1.25rem;
+        flex-wrap: wrap;
+        position: relative;
+        z-index: 1;
     }
 
     .meta-item {
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-    }
-
-    .stats-cards {
-        display: grid;
-        grid-template-columns: repeat(4, 1fr);
-        gap: 1.5rem;
-        margin-bottom: 2rem;
-    }
-
-    .stat-card {
-        background: rgba(30, 41, 59, 0.4);
+        background: rgba(255, 255, 255, 0.03);
+        padding: 0.875rem 1.5rem;
         border-radius: 12px;
-        padding: 1.5rem;
-        border: 1px solid rgba(6, 182, 212, 0.2);
-        text-align: center;
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        transition: all 0.2s;
+        min-width: 200px;
     }
 
-    .stat-number {
-        font-size: 2.5rem;
-        font-weight: 800;
-        background: linear-gradient(135deg, #06B6D4 0%, #8B5CF6 100%);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
+    .meta-item:hover {
+        background: rgba(255, 255, 255, 0.06);
+        border-color: rgba(56, 189, 248, 0.3);
     }
 
-    .stat-label {
+    .meta-label {
+        font-size: 0.75rem;
         color: #94A3B8;
-        margin-top: 0.5rem;
+        margin-bottom: 0.25rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
     }
 
-    .section-card {
-        background: rgba(30, 41, 59, 0.4);
-        border-radius: 20px;
-        padding: 2rem;
-        border: 1px solid rgba(6, 182, 212, 0.2);
+    .meta-value {
+        font-weight: 600;
+        font-size: 1rem;
+        color: #F1F5F9;
+        word-break: break-word;
+    }
+
+    /* ===== MAIN GRID LAYOUT ===== */
+    .main-grid {
+        display: grid;
+        grid-template-columns: 1.2fr 0.8fr;
+        gap: 2rem;
         margin-bottom: 2rem;
+    }
+
+    @media (max-width: 1024px) {
+        .main-grid {
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+        }
+        
+        .report-container {
+            padding: 1rem;
+        }
+    }
+
+    .left-column,
+    .right-column {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+
+    /* ===== SECTION CARDS ===== */
+    .section-card {
+        background: #1E293B;
+        border-radius: 16px;
+        padding: 1.5rem;
+        border: 1px solid #334155;
+        transition: all 0.2s;
+        box-shadow: 0 10px 15px -5px rgba(0, 0, 0, 0.3);
+    }
+
+    .section-card:hover {
+        border-color: #38BDF8;
+        box-shadow: 0 20px 25px -10px rgba(56, 189, 248, 0.2);
     }
 
     .section-title {
-        color: #06B6D4;
-        font-size: 1.5rem;
-        margin-bottom: 1.5rem;
+        color: #F1F5F9;
+        font-size: 1.25rem;
+        font-weight: 600;
+        margin-bottom: 1.25rem;
         display: flex;
         align-items: center;
-        gap: 0.5rem;
+        gap: 0.75rem;
+        padding-bottom: 0.75rem;
+        border-bottom: 1px solid #334155;
+        letter-spacing: -0.01em;
     }
 
-    .instruction-box {
-        background: rgba(15, 23, 42, 0.6);
-        border-left: 4px solid #06B6D4;
-        border-radius: 8px;
-        padding: 1.5rem;
-        color: #CBD5E1;
-        font-size: 1.1rem;
-        font-family: 'Courier New', monospace;
+    .section-title i {
+        font-size: 1.25rem;
+        color: #38BDF8;
     }
 
-    .timeline {
-        position: relative;
-        padding-left: 2rem;
+    /* ===== SCREENSHOT SECTION ===== */
+    .result-screenshot-section {
+        text-align: center;
+        min-height: 300px;
+        display: flex;
+        flex-direction: column;
     }
 
-    .timeline::before {
-        content: '';
-        position: absolute;
-        left: 0;
-        top: 0;
-        bottom: 0;
-        width: 2px;
-        background: linear-gradient(180deg, #06B6D4 0%, #8B5CF6 100%);
-    }
-
-    .timeline-item {
-        background: rgba(15, 23, 42, 0.6);
+    .screenshot-placeholder {
+        width: 100%;
+        height: 280px;
+        background: #0F172A;
+        border: 2px dashed #334155;
         border-radius: 12px;
-        padding: 1.5rem;
-        margin-bottom: 1rem;
-        position: relative;
-    }
-
-    .timeline-item::before {
-        content: '';
-        position: absolute;
-        left: -2.5rem;
-        top: 1.5rem;
-        width: 12px;
-        height: 12px;
-        border-radius: 50%;
-        background: #06B6D4;
-        border: 3px solid #0F172A;
-    }
-
-    .timeline-item.failed::before {
-        background: #EF4444;
-    }
-
-    .step-header {
         display: flex;
-        justify-content: space-between;
+        flex-direction: column;
         align-items: center;
+        justify-content: center;
+        color: #64748B;
+        margin-bottom: 0;
+        transition: all 0.2s;
+        cursor: pointer;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .screenshot-placeholder:hover {
+        border-color: #38BDF8;
+        background: #1A2534;
+    }
+
+    .screenshot-placeholder i {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+        color: #38BDF8;
+        opacity: 0.7;
+    }
+
+    .screenshot-img {
+        width: 100%;
+        height: 280px;
+        object-fit: contain;
+        border-radius: 12px;
+        border: 1px solid #334155;
+        transition: all 0.2s;
+        cursor: pointer;
+        background: #0F172A;
+    }
+
+    .screenshot-img:hover {
+        border-color: #38BDF8;
+        transform: scale(1.01);
+    }
+
+    .screenshot-counter {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+        background: #1E293B;
+        color: #F1F5F9;
+        padding: 0.375rem 0.875rem;
+        border-radius: 20px;
+        font-size: 0.75rem;
+        font-weight: 500;
+        backdrop-filter: blur(5px);
+        border: 1px solid #334155;
+        z-index: 2;
+    }
+
+    .no-screenshot {
+        padding: 2rem;
+        text-align: center;
+        background: #0F172A;
+        border-radius: 12px;
+        border: 2px dashed #334155;
+    }
+
+    .no-screenshot i {
+        font-size: 2.5rem;
+        color: #64748B;
         margin-bottom: 0.75rem;
     }
 
-    .step-action {
-        color: #E2E8F0;
-        font-weight: 600;
+    .no-screenshot h3 {
+        color: #F1F5F9;
+        margin-bottom: 0.25rem;
         font-size: 1.1rem;
+        font-weight: 500;
     }
 
-    .status-badge {
-        padding: 0.375rem 1rem;
-        border-radius: 8px;
-        font-weight: 600;
-        font-size: 0.875rem;
+    .no-screenshot p {
+        color: #64748B;
+        font-size: 0.9rem;
     }
 
-    .status-badge.passed {
-        background: rgba(16, 185, 129, 0.2);
-        color: #10B981;
+    /* ===== STATISTICS GRID ===== */
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 1rem;
     }
 
-    .status-badge.failed {
-        background: rgba(239, 68, 68, 0.2);
-        color: #EF4444;
+    @media (max-width: 768px) {
+        .stats-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
     }
 
-    .step-details {
-        color: #94A3B8;
-    }
-
-    .code-section {
-        background: #1E293B;
+    .stat-item {
+        background: #0F172A;
         border-radius: 12px;
-        padding: 1.5rem;
-        overflow-x: auto;
+        padding: 1.25rem 0.75rem;
+        text-align: center;
+        border: 1px solid #334155;
+        transition: all 0.2s;
     }
 
-    .code-header {
+    .stat-item:hover {
+        border-color: #38BDF8;
+        transform: translateY(-2px);
+    }
+
+    .stat-number {
+        font-size: 2rem;
+        font-weight: 700;
+        margin-bottom: 0.25rem;
+        line-height: 1;
+    }
+
+    .stat-number.total { color: #38BDF8; }
+    .stat-number.passed { color: #4ADE80; }
+    .stat-number.failed { color: #F87171; }
+    .stat-number.rate { color: #C084FC; }
+
+    .stat-label {
+        color: #94A3B8;
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        font-weight: 500;
+    }
+
+    /* ===== TIMELINE ===== */
+    .timeline {
+        max-height: 500px;
+        overflow-y: auto;
+        padding-right: 0.5rem;
+        scrollbar-width: thin;
+        scrollbar-color: #475569 #1E293B;
+    }
+
+    .timeline::-webkit-scrollbar {
+        width: 4px;
+    }
+
+    .timeline::-webkit-scrollbar-track {
+        background: #1E293B;
+        border-radius: 4px;
+    }
+
+    .timeline::-webkit-scrollbar-thumb {
+        background: #475569;
+        border-radius: 4px;
+    }
+
+    .timeline::-webkit-scrollbar-thumb:hover {
+        background: #38BDF8;
+    }
+
+    .timeline-item {
+        background: #0F172A;
+        border-radius: 12px;
+        padding: 1.25rem;
+        margin-bottom: 0.75rem;
+        border-left: 3px solid #38BDF8;
+        position: relative;
+        transition: all 0.2s;
+    }
+
+    .timeline-item:hover {
+        background: #1A2534;
+        transform: translateX(4px);
+    }
+
+    .timeline-item.failed {
+        border-left-color: #F87171;
+    }
+
+    .timeline-item.warning {
+        border-left-color: #FBBF24;
+    }
+
+    .timeline-step {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+        background: #1E293B;
+        color: #94A3B8;
+        width: 26px;
+        height: 26px;
+        border-radius: 6px;
         display: flex;
-        justify-content: space-between;
         align-items: center;
+        justify-content: center;
+        font-weight: 600;
+        font-size: 0.8rem;
+        border: 1px solid #334155;
+    }
+
+    .timeline-item.failed .timeline-step {
+        background: rgba(248, 113, 113, 0.1);
+        color: #F87171;
+        border-color: #F87171;
+    }
+
+    .timeline-item.warning .timeline-step {
+        background: rgba(251, 191, 36, 0.1);
+        color: #FBBF24;
+        border-color: #FBBF24;
+    }
+
+    .timeline-content {
+        padding-right: 40px;
+    }
+
+    .timeline-action {
+        color: #F1F5F9;
+        font-weight: 600;
+        margin-bottom: 0.25rem;
+        font-size: 1rem;
+    }
+
+    .timeline-description {
+        color: #94A3B8;
+        line-height: 1.5;
+        font-size: 0.9rem;
+    }
+
+    .error-message {
+        margin-top: 0.75rem;
+        padding: 0.625rem 0.875rem;
+        background: rgba(248, 113, 113, 0.1);
+        border-radius: 8px;
+        color: #F87171;
+        font-size: 0.85rem;
+        border-left: 2px solid #F87171;
+    }
+
+    /* ===== BUTTON GRIDS ===== */
+    .action-buttons-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.75rem;
+    }
+
+    @media (max-width: 480px) {
+        .action-buttons-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    .horizontal-button-row {
+        display: flex;
+        flex-direction: row;
+        gap: 0.75rem;
+        margin-top: 0.5rem;
+        width: 100%;
+    }
+
+    .horizontal-button-row .btn {
+        flex: 1;
+    }
+
+    @media (max-width: 640px) {
+        .horizontal-button-row {
+            flex-direction: column;
+        }
+    }
+
+    /* ===== BUTTON STYLES ===== */
+    .btn {
+        padding: 0.75rem 1rem;
+        border-radius: 10px;
+        border: none;
+        cursor: pointer;
+        font-weight: 500;
+        font-size: 0.9rem;
+        transition: all 0.2s;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        text-decoration: none;
+        text-align: center;
+        white-space: nowrap;
+    }
+
+    .btn:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 8px 12px -5px rgba(0, 0, 0, 0.3);
+    }
+
+    .btn:active {
+        transform: translateY(0);
+    }
+
+    .btn-primary {
+        background: #0F172A;
+        color: #38BDF8;
+        border: 1px solid #38BDF8;
+    }
+
+    .btn-primary:hover {
+        background: #1E293B;
+        border-color: #7DD3FC;
+    }
+
+    .btn-success {
+        background: #0F172A;
+        color: #4ADE80;
+        border: 1px solid #4ADE80;
+    }
+
+    .btn-success:hover {
+        background: #1E293B;
+    }
+
+    .btn-purple {
+        background: #0F172A;
+        color: #C084FC;
+        border: 1px solid #C084FC;
+    }
+
+    .btn-purple:hover {
+        background: #1E293B;
+    }
+
+    .btn-secondary {
+        background: #0F172A;
+        color: #94A3B8;
+        border: 1px solid #334155;
+    }
+
+    .btn-secondary:hover {
+        background: #1E293B;
+        color: #F1F5F9;
+        border-color: #475569;
+    }
+
+    /* ===== ANALYSIS BOX ===== */
+    .analysis-box {
+        background: #0F172A;
+        border: 1px solid #334155;
+        border-radius: 12px;
+        padding: 1.25rem;
         margin-bottom: 1rem;
     }
 
-    .code-block {
-        color: #E2E8F0;
-        font-family: 'Courier New', monospace;
-        font-size: 0.9rem;
+    .analysis-box:last-child {
+        margin-bottom: 0;
+    }
+
+    .analysis-box h4 {
+        color: #F1F5F9;
+        margin-bottom: 0.875rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 1rem;
+        font-weight: 600;
+    }
+
+    .analysis-box h4 i {
+        color: #38BDF8;
+    }
+
+    .analysis-content {
+        color: #CBD5E1;
         line-height: 1.6;
-        white-space: pre;
+        white-space: pre-wrap;
+        word-wrap: break-word;
+        max-height: 350px;
+        overflow-y: auto;
+        padding: 0;
+        font-size: 0.95rem;
+        scrollbar-width: thin;
+        scrollbar-color: #475569 #1E293B;
     }
 
-    .copy-btn {
-        background: rgba(6, 182, 212, 0.2);
-        color: #06B6D4;
+    .analysis-content::-webkit-scrollbar {
+        width: 4px;
+    }
+
+    .analysis-content::-webkit-scrollbar-track {
+        background: #1E293B;
+        border-radius: 4px;
+    }
+
+    .analysis-content::-webkit-scrollbar-thumb {
+        background: #475569;
+        border-radius: 4px;
+    }
+
+    .analysis-content pre {
+        margin: 0;
+        font-family: inherit;
+        white-space: pre-wrap;
+        color: #CBD5E1;
+    }
+
+    /* ===== EMPTY STATES ===== */
+    .empty-state {
+        padding: 2.5rem 1.5rem;
+        text-align: center;
+        background: #0F172A;
+        border-radius: 12px;
+        border: 1px solid #334155;
+    }
+
+    .empty-state i {
+        font-size: 2.5rem;
+        color: #475569;
+        margin-bottom: 0.75rem;
+    }
+
+    .empty-state h3 {
+        color: #94A3B8;
+        margin-bottom: 0.25rem;
+        font-size: 1rem;
+        font-weight: 500;
+    }
+
+    /* ===== MODAL STYLES ===== */
+    .modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.95);
+        z-index: 1000;
+        align-items: center;
+        justify-content: center;
+        backdrop-filter: blur(8px);
+    }
+
+    .modal-content {
+        position: relative;
+        max-width: 90%;
+        max-height: 90%;
+        background: #1E293B;
+        border-radius: 16px;
+        padding: 1.5rem;
+        border: 1px solid #38BDF8;
+        box-shadow: 0 25px 40px -15px rgba(0, 0, 0, 0.8);
+    }
+
+    .close-modal {
+        position: absolute;
+        top: -0.75rem;
+        right: -0.75rem;
+        background: #EF4444;
+        color: white;
+        width: 2rem;
+        height: 2rem;
+        border-radius: 9999px;
         border: none;
-        padding: 0.5rem 1rem;
-        border-radius: 6px;
+        font-size: 1.25rem;
         cursor: pointer;
-        transition: all 0.3s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 1001;
+        transition: all 0.2s;
+        box-shadow: 0 4px 8px -2px rgba(239, 68, 68, 0.3);
     }
 
-    .copy-btn:hover {
-        background: rgba(6, 182, 212, 0.3);
+    .close-modal:hover {
+        transform: rotate(90deg);
+        background: #DC2626;
+    }
+
+    .modal-img {
+        max-width: 100%;
+        max-height: 70vh;
+        border-radius: 12px;
+        object-fit: contain;
+        background: #0F172A;
+    }
+
+    .modal-actions {
+        display: flex;
+        gap: 0.75rem;
+        justify-content: center;
+        margin-top: 1.25rem;
+    }
+
+    /* ===== NOTIFICATION TOAST ===== */
+    .notification {
+        position: fixed;
+        top: 1.5rem;
+        right: 1.5rem;
+        padding: 0.875rem 1.25rem;
+        border-radius: 10px;
+        color: white;
+        font-weight: 500;
+        z-index: 9999;
+        animation: slideIn 0.2s ease;
+        display: flex;
+        align-items: center;
+        gap: 0.625rem;
+        box-shadow: 0 10px 20px -8px rgba(0, 0, 0, 0.4);
+        font-size: 0.9rem;
+    }
+
+    @keyframes slideIn {
+        from {
+            transform: translateX(100%);
+            opacity: 0;
+        }
+        to {
+            transform: translateX(0);
+            opacity: 1;
+        }
+    }
+
+    .notification.success {
+        background: #059669;
+        border-left: 3px solid #4ADE80;
+    }
+
+    .notification.error {
+        background: #B91C1C;
+        border-left: 3px solid #F87171;
+    }
+
+    .notification.info {
+        background: #1E40AF;
+        border-left: 3px solid #38BDF8;
+    }
+
+    /* ===== SOURCE BADGE ===== */
+    .source-badge {
+        display: inline-block;
+        background: #1E293B;
+        padding: 0.25rem 0.75rem;
+        border-radius: 20px;
+        font-size: 0.7rem;
+        color: #94A3B8;
+        margin-left: 0.5rem;
+        border: 1px solid #334155;
+        font-weight: 500;
+    }
+
+    /* ===== RESPONSIVE FIXES ===== */
+    @media (max-width: 768px) {
+        .report-header {
+            padding: 1.5rem;
+        }
+        
+        .report-header h1 {
+            font-size: 1.75rem;
+        }
+        
+        .report-meta {
+            gap: 0.75rem;
+        }
+        
+        .meta-item {
+            width: 100%;
+            min-width: auto;
+        }
+        
+        .section-card {
+            padding: 1.25rem;
+        }
+        
+        .screenshot-placeholder,
+        .screenshot-img {
+            height: 220px;
+        }
     }
 </style>
 {% endblock %}
@@ -221,148 +770,569 @@
 <div class="report-container">
     <!-- Header -->
     <div class="report-header">
-        <div class="report-title">
-            <h1>{{ report.report_id }}</h1>
-            <div class="download-buttons">
-                <button class="btn btn-secondary" onclick="downloadReport('{{ report.report_id }}', 'html')">
-                    <i class="fas fa-download"></i> Download HTML
-                </button>
-                <button class="btn btn-primary" onclick="downloadReport('{{ report.report_id }}', 'pdf')">
-                    <i class="fas fa-file-pdf"></i> Download PDF
-                </button>
-            </div>
-        </div>
+        <h1>
+            <i class="fas fa-file-alt"></i>
+            Report: {{ report.report_id }}
+        </h1>
+        <p>
+            <i class="fas fa-clock"></i> Created: {{ report.created_at if report.created_at else 'N/A' }}
+        </p>
         
         <div class="report-meta">
             <div class="meta-item">
-                <i class="fas fa-calendar"></i>
-                <span>{{ report.created_at }}</span>
+                <div class="meta-label">Test Instruction</div>
+                <div class="meta-value">{{ report.instruction if report.instruction else 'No instruction provided' }}</div>
             </div>
             <div class="meta-item">
-                <i class="fas fa-clock"></i>
-                <span>{{ report.total_steps }} steps executed</span>
+                <div class="meta-label">Status</div>
+                <div class="meta-value" style="color: {% if report.status == 'PASSED' %}#4ADE80{% elif report.status == 'FAILED' %}#F87171{% else %}#FBBF24{% endif %};">
+                    {{ report.status if report.status else 'UNKNOWN' }}
+                </div>
             </div>
             <div class="meta-item">
-                <i class="fas fa-robot"></i>
-                <span>Playwright Automation</span>
+                <div class="meta-label">Duration</div>
+                <div class="meta-value">
+                    {% if report.metadata and report.metadata.duration_seconds %}
+                        {{ "%.2f"|format(report.metadata.duration_seconds) }}s
+                    {% elif report.duration %}
+                        {{ report.duration }}s
+                    {% else %}
+                        N/A
+                    {% endif %}
+                </div>
             </div>
         </div>
     </div>
 
-    <!-- Statistics -->
-    <div class="stats-cards">
-        <div class="stat-card">
-            <div class="stat-number">{{ report.total_steps }}</div>
-            <div class="stat-label">Total Steps</div>
-        </div>
-        <div class="stat-card">
-            <div class="stat-number" style="color: #10B981;">{{ report.passed_steps }}</div>
-            <div class="stat-label">Passed</div>
-        </div>
-        <div class="stat-card">
-            <div class="stat-number" style="color: #EF4444;">{{ report.failed_steps }}</div>
-            <div class="stat-label">Failed</div>
-        </div>
-        <div class="stat-card">
-            <div class="stat-number">{{ report.success_rate|round|int }}%</div>
-            <div class="stat-label">Success Rate</div>
-        </div>
-    </div>
-
-    <!-- Test Instruction -->
-    <div class="section-card">
-        <h2 class="section-title">
-            <i class="fas fa-keyboard"></i> Test Instruction
-        </h2>
-        <div class="instruction-box">{{ report.instruction }}</div>
-    </div>
-
-    <!-- Execution Timeline -->
-    <div class="section-card">
-        <h2 class="section-title">
-            <i class="fas fa-tasks"></i> Execution Timeline
-        </h2>
-        <div class="timeline">
-            {% for step in report.execution %}
-            <div class="timeline-item {{ 'failed' if step.status == 'Failed' else '' }}">
-                <div class="step-header">
-                    <div class="step-action">
-                        Step {{ loop.index }}: {{ step.action|replace('_', ' ')|title }}
+    <!-- Main Grid -->
+    <div class="main-grid">
+        <!-- Left Column -->
+        <div class="left-column">
+            <!-- Result Screenshot -->
+            <div class="section-card">
+                <h2 class="section-title">
+                    <i class="fas fa-camera"></i> Result Screenshot
+                </h2>
+                <div id="result-screenshot-container" class="result-screenshot-section">
+                    <div class="screenshot-placeholder" onclick="viewScreenshot()" id="screenshot-placeholder">
+                        <i class="fas fa-image"></i>
+                        <div>
+                            <div style="font-size: 1rem; margin-bottom: 0.25rem; color: #94A3B8;">Click to view screenshot</div>
+                            <div style="font-size: 0.8rem; color: #64748B;" id="screenshot-count">Loading...</div>
+                        </div>
                     </div>
-                    <span class="status-badge {{ step.status.lower() }}">
-                        {{ step.status }}
-                    </span>
-                </div>
-                <div class="step-details">
-                    {{ step.description or step.details or 'No details' }}
+                    <div id="screenshot-error" style="display: none;" class="no-screenshot">
+                        <i class="fas fa-exclamation-circle"></i>
+                        <h3>No Screenshot Available</h3>
+                        <p>No screenshot was captured for this report</p>
+                    </div>
                 </div>
             </div>
-            {% endfor %}
+
+            <!-- Test Statistics -->
+            <div class="section-card">
+                <h2 class="section-title">
+                    <i class="fas fa-chart-bar"></i> Statistics
+                </h2>
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <div class="stat-number total">{{ report.total_steps if report.total_steps else 0 }}</div>
+                        <div class="stat-label">Total</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number passed">{{ report.passed_steps if report.passed_steps else 0 }}</div>
+                        <div class="stat-label">Passed</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number failed">{{ report.failed_steps if report.failed_steps else 0 }}</div>
+                        <div class="stat-label">Failed</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number rate">{{ report.success_rate|round|int if report.success_rate else 0 }}%</div>
+                        <div class="stat-label">Success</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Execution Timeline -->
+            <div class="section-card">
+                <h2 class="section-title">
+                    <i class="fas fa-list-ol"></i> Timeline
+                </h2>
+                <div class="timeline" id="timeline-content">
+                    {% if report.execution and report.execution|length > 0 %}
+                        {% for step in report.execution %}
+                        <div class="timeline-item {% if step.status == 'Failed' %}failed{% elif step.status == 'Warning' %}warning{% endif %}">
+                            <div class="timeline-step">{{ loop.index }}</div>
+                            <div class="timeline-content">
+                                <div class="timeline-action">{{ step.action if step.action else 'Step ' + loop.index|string }}</div>
+                                <div class="timeline-description">{{ step.description if step.description else step.details if step.details else 'No description available' }}</div>
+                                {% if step.error_message %}
+                                <div class="error-message">
+                                    <i class="fas fa-exclamation-circle"></i> {{ step.error_message }}
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                        <div class="empty-state">
+                            <i class="fas fa-info-circle"></i>
+                            <h3>No execution data available</h3>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Column -->
+        <div class="right-column">
+            <!-- Download Reports -->
+            <div class="section-card">
+                <h2 class="section-title">
+                    <i class="fas fa-download"></i> Downloads
+                </h2>
+                <div class="action-buttons-grid">
+                    <button class="btn btn-primary" onclick="downloadReport('html')">
+                        <i class="fas fa-file-code"></i> HTML
+                    </button>
+                    <button class="btn btn-success" onclick="downloadReport('pdf')">
+                        <i class="fas fa-file-pdf"></i> PDF
+                    </button>
+                    <button class="btn btn-purple" onclick="downloadReport('analysis')">
+                        <i class="fas fa-chart-bar"></i> Analysis
+                    </button>
+                    <button class="btn btn-secondary" onclick="downloadReport('json')">
+                        <i class="fas fa-file-code"></i> JSON
+                    </button>
+                    <button class="btn btn-secondary" onclick="downloadReport('json-pdf')">
+                        <i class="fas fa-file-pdf"></i> JSON-PDF
+                    </button>
+                    <button class="btn btn-primary" onclick="downloadAllScreenshots()">
+                        <i class="fas fa-images"></i> Screenshots
+                    </button>
+                    <a href="/reports" class="btn btn-secondary" style="grid-column: span 2;">
+                        <i class="fas fa-arrow-left"></i> Back
+                    </a>
+                </div>
+            </div>
+
+            <!-- Result Page Analysis -->
+            <div class="section-card">
+                <h2 class="section-title">
+                    <i class="fas fa-search"></i> Page Analysis
+                </h2>
+                <div id="analysis-content">
+                    {% if report.result_page_analysis %}
+                        {% if report.result_page_analysis is string %}
+                            <div class="analysis-box">
+                                <h4><i class="fas fa-check-circle"></i> Result Summary</h4>
+                                <div class="analysis-content">{{ report.result_page_analysis }}</div>
+                            </div>
+                        {% elif report.result_page_analysis is mapping %}
+                            {% if report.result_page_analysis.summary or report.result_page_analysis.content %}
+                                <div class="analysis-box">
+                                    <h4><i class="fas fa-check-circle"></i> {% if report.result_page_analysis.summary %}AI Summary{% else %}Content{% endif %}</h4>
+                                    <div class="analysis-content">
+                                        {% if report.result_page_analysis.summary %}
+                                            {{ report.result_page_analysis.summary }}
+                                        {% elif report.result_page_analysis.content %}
+                                            {{ report.result_page_analysis.content }}
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                
+                                {% if report.result_page_analysis.full_content %}
+                                <div class="analysis-box">
+                                    <h4><i class="fas fa-file-alt"></i> Full Content</h4>
+                                    <div class="analysis-content">
+                                        <pre>{{ report.result_page_analysis.full_content }}</pre>
+                                    </div>
+                                </div>
+                                {% endif %}
+                                
+                            {% elif report.result_page_analysis.text %}
+                                <div class="analysis-box">
+                                    <h4><i class="fas fa-check-circle"></i> Content</h4>
+                                    <div class="analysis-content">{{ report.result_page_analysis.text }}</div>
+                                </div>
+                            {% else %}
+                                <div class="empty-state">
+                                    <i class="fas fa-info-circle"></i>
+                                    <h3>No analysis available</h3>
+                                </div>
+                            {% endif %}
+                        {% elif report.result_page_analysis is iterable and report.result_page_analysis is not string %}
+                            <div class="analysis-box">
+                                <h4><i class="fas fa-check-circle"></i> Analysis</h4>
+                                <div class="analysis-content">
+                                    {% for item in report.result_page_analysis %}
+                                        {% if item is string %}
+                                            {{ item }}
+                                        {% elif item is mapping %}
+                                            {% if item.summary %}
+                                                {{ item.summary }}
+                                            {% elif item.content %}
+                                                {{ item.content }}
+                                            {% elif item.text %}
+                                                {{ item.text }}
+                                            {% endif %}
+                                        {% endif %}
+                                        {% if not loop.last %}<br>{% endif %}
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        {% else %}
+                            <div class="empty-state">
+                                <i class="fas fa-info-circle"></i>
+                                <h3>No analysis available</h3>
+                            </div>
+                        {% endif %}
+                    {% elif report.metadata and report.metadata.result_summary %}
+                        <div class="analysis-box">
+                            <h4><i class="fas fa-check-circle"></i> Summary</h4>
+                            <div class="analysis-content">{{ report.metadata.result_summary }}</div>
+                        </div>
+                    {% elif report.final_screenshot_data and report.final_screenshot_data.summary %}
+                        <div class="analysis-box">
+                            <h4><i class="fas fa-check-circle"></i> Summary</h4>
+                            <div class="analysis-content">{{ report.final_screenshot_data.summary }}</div>
+                        </div>
+                    {% else %}
+                        <div class="empty-state">
+                            <i class="fas fa-info-circle"></i>
+                            <h3>No analysis available</h3>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
         </div>
     </div>
 
-    <!-- Generated Code -->
-    <div class="section-card">
-        <h2 class="section-title">
-            <i class="fas fa-code"></i> Generated Test Code
-        </h2>
-        <div class="code-section">
-            <div class="code-header">
-                <span style="color: #94A3B8;">Python / Playwright</span>
-                <button class="copy-btn" onclick="copyCode()">
-                    <i class="fas fa-copy"></i> Copy Code
+    <!-- Quick Actions -->
+    <div class="quick-actions-row">
+        <div class="section-card">
+            <h2 class="section-title">
+                <i class="fas fa-bolt"></i> Quick Actions
+            </h2>
+            <div class="horizontal-button-row">
+                <button class="btn btn-primary" onclick="runSameTest()">
+                    <i class="fas fa-redo"></i> Run Same Test
+                </button>
+                <button class="btn btn-secondary" onclick="copyReportLink()">
+                    <i class="fas fa-link"></i> Copy Link
+                </button>
+                <button class="btn btn-purple" onclick="shareReport()">
+                    <i class="fas fa-share"></i> Share
                 </button>
             </div>
-            <div class="code-block" id="codeBlock">{{ report.generated_code or 'No code generated' }}</div>
         </div>
     </div>
+</div>
 
-    <!-- Back Button -->
-    <div style="text-align: center; margin-top: 3rem;">
-        <a href="/reports" class="btn btn-secondary">
-            <i class="fas fa-arrow-left"></i> Back to Reports
-        </a>
+<!-- Screenshot Modal -->
+<div id="screenshotModal" class="modal">
+    <div class="modal-content">
+        <button class="close-modal" onclick="closeModal()">&times;</button>
+        <img class="modal-img" id="modalImage" src="" alt="Screenshot">
+        <div class="modal-actions">
+            <button class="btn btn-primary" onclick="downloadCurrentScreenshot()">
+                <i class="fas fa-download"></i> Download
+            </button>
+            <button class="btn btn-secondary" onclick="closeModal()">
+                <i class="fas fa-times"></i> Close
+            </button>
+        </div>
     </div>
 </div>
 
 <script>
-async function downloadReport(reportId, format) {
-    try {
-        const response = await fetch(`/api/download-report/${format}`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ report_id: reportId })
-        });
+// Global variables
+let currentReportId = '{{ report.report_id }}';
+let currentScreenshotPath = null;
+let currentScreenshotFilename = null;
+let allScreenshots = [];
 
-        if (response.ok) {
-            const blob = await response.blob();
-            const url = window.URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `${reportId}.${format}`;
-            document.body.appendChild(a);
-            a.click();
-            window.URL.revokeObjectURL(url);
-            document.body.removeChild(a);
-        } else {
-            alert('Failed to download report');
+// Initialize page
+document.addEventListener('DOMContentLoaded', function() {
+    loadScreenshotDirectly();
+    syncDashboardReports();
+});
+
+function syncDashboardReports() {
+    fetch('/api/sync-dashboard-reports', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
         }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            console.log('Dashboard reports synced');
+        }
+    })
+    .catch(error => console.error('Error syncing reports:', error));
+}
+
+function loadScreenshotDirectly() {
+    console.log('Loading screenshot for report:', currentReportId);
+    
+    const placeholder = document.getElementById('screenshot-placeholder');
+    const errorDiv = document.getElementById('screenshot-error');
+    const countSpan = document.getElementById('screenshot-count');
+    
+    // Collect all possible screenshot filenames
+    const possibleFilenames = [];
+    
+    // 1. Check from final_screenshot_data in the report
+    {% if report.final_screenshot_data and report.final_screenshot_data.filename %}
+        possibleFilenames.push('{{ report.final_screenshot_data.filename }}');
+        console.log('Added from final_screenshot_data: {{ report.final_screenshot_data.filename }}');
+    {% endif %}
+    
+    // 2. Check from metadata filename
+    {% if report.metadata and report.metadata.final_screenshot_filename %}
+        possibleFilenames.push('{{ report.metadata.final_screenshot_filename }}');
+        console.log('Added from metadata.final_screenshot_filename: {{ report.metadata.final_screenshot_filename }}');
+    {% endif %}
+    
+    // 3. Extract from metadata full path
+    {% if report.metadata and report.metadata.final_screenshot %}
+        const fullPath = '{{ report.metadata.final_screenshot }}';
+        const filename = fullPath.split('/').pop();
+        possibleFilenames.push(filename);
+        console.log('Added from metadata.final_screenshot:', filename);
+    {% endif %}
+    
+    // 4. Try common patterns based on report ID
+    possibleFilenames.push(`result_page_${currentReportId}_*.png`);
+    possibleFilenames.push(`final_${currentReportId}_*.png`);
+    possibleFilenames.push(`screenshot_${currentReportId}_*.png`);
+    
+    async function tryLoadScreenshot() {
+        // First try exact filenames
+        for (let filename of possibleFilenames) {
+            if (filename.includes('*')) continue; // Skip wildcards
+            
+            const url = `/api/download-screenshot/${filename}`;
+            try {
+                const response = await fetch(url, { method: 'HEAD' });
+                if (response.ok) {
+                    console.log('Found screenshot at:', url);
+                    currentScreenshotPath = url;
+                    currentScreenshotFilename = filename;
+                    
+                    placeholder.innerHTML = `
+                        <img src="${url}" 
+                             class="screenshot-img" 
+                             alt="Screenshot"
+                             onclick="viewScreenshot()"
+                             onerror="handleImageError(this)">
+                    `;
+                    countSpan.textContent = '1 screenshot available';
+                    return true;
+                }
+            } catch (e) {
+                console.log('Failed to load:', url);
+            }
+        }
+        
+        // If no exact match, try the API to list screenshots
+        try {
+            const response = await fetch(`/api/reports/${currentReportId}/screenshots`);
+            if (response.ok) {
+                const data = await response.json();
+                if (data.screenshots && data.screenshots.length > 0) {
+                    allScreenshots = data.screenshots;
+                    const screenshot = allScreenshots[0];
+                    const url = screenshot.url || `/api/download-screenshot/${screenshot.filename}`;
+                    
+                    currentScreenshotPath = url;
+                    currentScreenshotFilename = screenshot.filename;
+                    
+                    placeholder.innerHTML = `
+                        <img src="${url}" 
+                             class="screenshot-img" 
+                             alt="Screenshot"
+                             onclick="viewScreenshot()"
+                             onerror="handleImageError(this)">
+                        ${allScreenshots.length > 1 ? `
+                        <div class="screenshot-counter">
+                            <i class="fas fa-camera"></i> ${allScreenshots.length}
+                        </div>
+                        ` : ''}
+                    `;
+                    countSpan.textContent = `${allScreenshots.length} screenshot(s) available`;
+                    return true;
+                }
+            }
+        } catch (e) {
+            console.error('Error fetching screenshots:', e);
+        }
+        
+        // No screenshot found
+        placeholder.style.display = 'none';
+        errorDiv.style.display = 'block';
+        countSpan.textContent = 'No screenshots available';
+        return false;
+    }
+    
+    tryLoadScreenshot();
+}
+
+function handleImageError(img) {
+    img.src = 'https://via.placeholder.com/800x600/1E293B/38BDF8?text=Screenshot+Error';
+    img.onclick = null;
+    img.style.cursor = 'default';
+}
+
+function viewScreenshot() {
+    if (!currentScreenshotPath) {
+        showNotification('No screenshot available', 'error');
+        return;
+    }
+    
+    const modal = document.getElementById('screenshotModal');
+    const modalImg = document.getElementById('modalImage');
+    
+    modalImg.src = currentScreenshotPath;
+    modal.style.display = 'flex';
+}
+
+function closeModal() {
+    document.getElementById('screenshotModal').style.display = 'none';
+}
+
+async function downloadReport(format) {
+    try {
+        showNotification(`Generating ${format.toUpperCase()}...`, 'info');
+        const url = `/api/download-report/${currentReportId}/${format}`;
+        
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `report_${currentReportId}.${format === 'json' ? 'json' : format === 'html' ? 'html' : 'pdf'}`;
+        a.style.display = 'none';
+        document.body.appendChild(a);
+        a.click();
+        
+        setTimeout(() => {
+            document.body.removeChild(a);
+            showNotification(`${format.toUpperCase()} download started`, 'success');
+        }, 100);
+        
     } catch (error) {
-        alert('Error: ' + error.message);
+        console.error('Download error:', error);
+        window.location.href = `/api/download-report/${currentReportId}/${format}`;
     }
 }
 
-function copyCode() {
-    const code = document.getElementById('codeBlock').textContent;
-    navigator.clipboard.writeText(code).then(() => {
-        const btn = event.target.closest('.copy-btn');
-        btn.innerHTML = '<i class="fas fa-check"></i> Copied!';
+function downloadCurrentScreenshot() {
+    if (currentScreenshotPath && currentScreenshotFilename) {
+        const a = document.createElement('a');
+        a.href = `/api/download-screenshot/${currentScreenshotFilename}`;
+        a.download = currentScreenshotFilename;
+        a.style.display = 'none';
+        document.body.appendChild(a);
+        a.click();
+        
         setTimeout(() => {
-            btn.innerHTML = '<i class="fas fa-copy"></i> Copy Code';
-        }, 2000);
+            document.body.removeChild(a);
+            showNotification('Screenshot downloaded', 'success');
+        }, 100);
+    } else {
+        showNotification('No screenshot available', 'error');
+    }
+}
+
+async function downloadAllScreenshots() {
+    try {
+        if (allScreenshots.length === 0 && !currentScreenshotFilename) {
+            showNotification('No screenshots available', 'error');
+            return;
+        }
+        
+        if (allScreenshots.length === 1 || currentScreenshotFilename) {
+            downloadCurrentScreenshot();
+            return;
+        }
+        
+        showNotification(`Creating ZIP with ${allScreenshots.length} screenshots...`, 'info');
+        window.location.href = `/api/download-all-screenshots/${currentReportId}`;
+        
+    } catch (error) {
+        console.error('Error downloading screenshots:', error);
+        showNotification('Failed to download screenshots', 'error');
+    }
+}
+
+function showNotification(message, type = 'info') {
+    document.querySelectorAll('.notification').forEach(n => n.remove());
+    
+    const notification = document.createElement('div');
+    notification.className = `notification ${type}`;
+    notification.innerHTML = `
+        <i class="fas fa-${type === 'success' ? 'check-circle' : 
+                           type === 'error' ? 'exclamation-circle' : 
+                           'info-circle'}"></i>
+        ${message}
+    `;
+    
+    document.body.appendChild(notification);
+    
+    setTimeout(() => {
+        notification.style.opacity = '0';
+        setTimeout(() => notification.remove(), 200);
+    }, 3000);
+}
+
+async function runSameTest() {
+    const instruction = {{ report.instruction|default("")|tojson }};
+    if (instruction) {
+        showNotification('Redirecting to test...', 'info');
+        window.location.href = `/dashboard?instruction=${encodeURIComponent(instruction)}`;
+    } else {
+        showNotification('No instruction found', 'error');
+    }
+}
+
+function copyReportLink() {
+    const url = window.location.href;
+    navigator.clipboard.writeText(url).then(() => {
+        showNotification('Link copied!', 'success');
+    }).catch(() => {
+        const textArea = document.createElement('textarea');
+        textArea.value = url;
+        document.body.appendChild(textArea);
+        textArea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textArea);
+        showNotification('Link copied!', 'success');
     });
 }
+
+function shareReport() {
+    if (navigator.share) {
+        navigator.share({
+            title: `NovaQA Report: ${currentReportId}`,
+            text: 'Test report from NovaQA',
+            url: window.location.href,
+        }).catch(() => copyReportLink());
+    } else {
+        copyReportLink();
+    }
+}
+
+// Close modal on ESC key
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeModal();
+});
+
+// Close modal when clicking outside
+document.getElementById('screenshotModal').addEventListener('click', (e) => {
+    if (e.target === document.getElementById('screenshotModal')) {
+        closeModal();
+    }
+});
 </script>
 {% endblock %}

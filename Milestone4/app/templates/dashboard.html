@@ -586,6 +586,18 @@
         background: rgba(239, 68, 68, 0.2);
         color: #EF4444;
     }
+    
+    .btn-analysis {
+        background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+        color: white;
+        border: none;
+    }
+
+    .btn-analysis:hover {
+        background: linear-gradient(135deg, #059669 0%, #047857 100%);
+        transform: translateY(-3px);
+        box-shadow: 0 10px 25px rgba(16, 185, 129, 0.4);
+    }
 </style>
 {% endblock %}
 
@@ -601,19 +613,19 @@
 
 <div class="stats-row">
     <div class="stat-box">
-        <div class="stat-number" id="totalTests">0</div>
+        <div class="stat-number" id="totalTests">{{ stats.total_tests }}</div>
         <div class="stat-label">Total Tests</div>
     </div>
     <div class="stat-box">
-        <div class="stat-number" id="passedTests">0</div>
+        <div class="stat-number" id="passedTests">{{ stats.passed_tests }}</div>
         <div class="stat-label">Passed</div>
     </div>
     <div class="stat-box">
-        <div class="stat-number" id="failedTests">0</div>
+        <div class="stat-number" id="failedTests">{{ stats.failed_tests }}</div>
         <div class="stat-label">Failed</div>
     </div>
     <div class="stat-box">
-        <div class="stat-number" id="successRate">0%</div>
+        <div class="stat-number" id="successRate">{{ stats.success_rate }}%</div>
         <div class="stat-label">Success Rate</div>
     </div>
 </div>
@@ -742,11 +754,17 @@ C) Simple Search Tests (no credentials needed):
     </div>
 
     <div class="result-actions">
-        <button class="btn btn-secondary" onclick="downloadCurrentReport('html')">
+        <button class="btn btn-secondary" onclick="downloadReport('html')">
             <i class="fas fa-download"></i> Download HTML Report
         </button>
-        <button class="btn btn-primary" onclick="downloadCurrentReport('pdf')">
+        <button class="btn btn-primary" onclick="downloadReport('pdf')">
             <i class="fas fa-file-pdf"></i> Download PDF Report
+        </button>
+        <button class="btn btn-analysis" onclick="downloadReport('analysis')">
+            <i class="fas fa-chart-bar"></i> Download Analysis PDF
+        </button>
+        <button class="btn btn-secondary" onclick="downloadReport('json')">
+            <i class="fas fa-file-code"></i> Download JSON Report
         </button>
         <a href="/reports" class="btn btn-primary" style="background: linear-gradient(135deg, #8B5CF6 0%, #06B6D4 100%);">
             <i class="fas fa-history"></i> View All Reports
@@ -799,13 +817,10 @@ C) Simple Search Tests (no credentials needed):
 
 <script>
 // Global variables
-let testCount = 0;
-let passedCount = 0;
-let failedCount = 0;
 let currentReportId = null;
 let currentExecutionData = null;
 
-// UPDATED: Changed example 2 from problematic Twitter to working Google search
+// FIXED: Correct examples array
 const examples = [
     "signup on linkedin with email test@mail.com password test123",
     "create an account on linkedin",
@@ -813,7 +828,7 @@ const examples = [
     "search laptop on amazon and add to cart"
 ];
 
-// UPDATED: Changed test mode description for example 2
+// FIXED: Correct testModes object
 const testModes = {
     0: { type: "provided", desc: "All credentials provided in instruction" },
     1: { type: "random", desc: "No credentials - requires Random Data" },
@@ -853,6 +868,9 @@ function useExample(index) {
         }
         
         updateTestModeIndicator();
+        
+        // Show a quick message
+        showNotification(`Example ${index + 1} loaded`, 'success');
     }
 }
 
@@ -887,7 +905,7 @@ async function runTest() {
     const useRandomData = document.getElementById('useRandomData').checked;
 
     if (!instruction) {
-        alert('Please provide a test instruction');
+        showNotification('Please provide a test instruction', 'error');
         document.getElementById('instructionText').focus();
         return;
     }
@@ -928,8 +946,8 @@ async function runTest() {
             // Display execution results
             displayExecution(data);
             
-            // Update statistics
-            updateStats(data);
+            // Update dashboard statistics
+            updateDashboardStats();
             
             // Show success banner
             showSuccessBanner(data);
@@ -943,6 +961,7 @@ async function runTest() {
                 <p style="margin-top: 1rem;">Please check your internet connection and try again.</p>
             </div>
         `;
+        showNotification('Connection error: ' + error.message, 'error');
     }
 }
 
@@ -1147,64 +1166,104 @@ function enableRandomDataAndRetry() {
     runTest();
 }
 
-// Update statistics
-function updateStats(data) {
-    testCount++;
-    
-    let hasFailedSteps = false;
-    if (data.execution && data.execution.length > 0) {
-        hasFailedSteps = data.execution.some(step => step.status === 'Failed');
-    } else {
-        hasFailedSteps = !data.success;
+// Update dashboard statistics
+async function updateDashboardStats() {
+    try {
+        const response = await fetch('/api/get-stats');
+        const data = await response.json();
+        
+        if (data.success) {
+            const stats = data.stats;
+            
+            // Update the UI elements
+            document.getElementById('totalTests').textContent = stats.total_tests;
+            document.getElementById('passedTests').textContent = stats.passed_tests;
+            document.getElementById('failedTests').textContent = stats.failed_tests;
+            document.getElementById('successRate').textContent = stats.success_rate + '%';
+        }
+    } catch (error) {
+        console.error('Error updating dashboard stats:', error);
     }
-    
-    if (!hasFailedSteps) {
-        passedCount++;
-    } else {
-        failedCount++;
-    }
-
-    document.getElementById('totalTests').textContent = testCount;
-    document.getElementById('passedTests').textContent = passedCount;
-    document.getElementById('failedTests').textContent = failedCount;
-    
-    const rate = testCount > 0 ? Math.round((passedCount / testCount) * 100) : 0;
-    document.getElementById('successRate').textContent = rate + '%';
 }
 
-// Download report
-async function downloadCurrentReport(format) {
+// Sync reports to ensure dashboard updates
+function syncDashboardReports() {
+    fetch('/api/sync-dashboard-reports', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            console.log('Dashboard reports synced:', data.count, 'reports');
+            updateDashboardStats();
+        }
+    })
+    .catch(error => console.error('Error syncing reports:', error));
+}
+
+// FIXED: Correct downloadReport function
+// FIXED: Correct downloadReport function
+async function downloadReport(format) {
     if (!currentReportId) {
-        alert('No test data available. Please run a test first.');
+        showNotification('No test data available. Please run a test first.', 'error');
         return;
     }
 
     try {
-        const response = await fetch(`/api/download-report/${format}`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ report_id: currentReportId })
-        });
+        // Show loading
+        const btn = event?.target || document.querySelector(`[onclick*="${format}"]`);
+        const originalText = btn.innerHTML;
+        btn.innerHTML = `<i class="fas fa-spinner fa-spin"></i> Generating ${format.toUpperCase()}...`;
+        btn.disabled = true;
 
-        if (response.ok) {
-            const blob = await response.blob();
-            const url = window.URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `test_report_${currentReportId}.${format}`;
-            document.body.appendChild(a);
-            a.click();
-            window.URL.revokeObjectURL(url);
+        // Use the correct URL format
+        const url = `/api/download-report/${currentReportId}/${format}`;
+        
+        // Create download link
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = true;
+        a.style.display = 'none';
+        document.body.appendChild(a);
+        
+        // Start download
+        a.click();
+        
+        // Clean up
+        setTimeout(() => {
             document.body.removeChild(a);
-        } else {
-            const error = await response.json();
-            alert('Failed to download report: ' + (error.error || 'Unknown error'));
-        }
+            btn.innerHTML = originalText;
+            btn.disabled = false;
+            
+            // Show success notification after a delay
+            setTimeout(() => {
+                showNotification(`${format.toUpperCase()} report download started!`, 'success');
+            }, 500);
+        }, 100);
+        
     } catch (error) {
-        alert('Error: ' + error.message);
+        console.error('Error downloading report:', error);
+        showNotification(`Error: ${error.message}`, 'error');
+        
+        // Reset button
+        const btn = event?.target || document.querySelector(`[onclick*="${format}"]`);
+        if (btn) {
+            btn.innerHTML = btn.innerHTML.replace('<i class="fas fa-spinner fa-spin"></i> ', '');
+            btn.disabled = false;
+        }
     }
+}
+
+// FIXED: Add download functions for JSON and Analysis reports
+async function downloadJSONReport() {
+    await downloadReport('json');
+}
+
+async function downloadAnalysisReport() {
+    await downloadReport('analysis');
 }
 
 // Initialize
@@ -1216,12 +1275,110 @@ document.addEventListener('DOMContentLoaded', function() {
     
     updateTestModeIndicator();
     
+    // Initialize stats from server
+    updateDashboardStats();
+    
+    // Sync reports on load
+    syncDashboardReports();
+    
     document.getElementById('testModesModal').addEventListener('click', function(e) {
         if (e.target === this) {
             closeTestModes();
         }
     });
 });
+
+// Notification function
+function showNotification(message, type = 'info') {
+    // Remove existing notifications
+    const existingNotifications = document.querySelectorAll('.notification');
+    existingNotifications.forEach(notif => {
+        if (notif.parentNode) {
+            notif.parentNode.removeChild(notif);
+        }
+    });
+    
+    // Create notification element
+    const notification = document.createElement('div');
+    notification.className = `notification`;
+    
+    let icon = 'fas fa-info-circle';
+    let bgColor = '#3B82F6'; // blue for info
+    
+    if (type === 'success') {
+        icon = 'fas fa-check-circle';
+        bgColor = '#10B981'; // green
+    } else if (type === 'error') {
+        icon = 'fas fa-exclamation-circle';
+        bgColor = '#EF4444'; // red
+    }
+    
+    notification.innerHTML = `
+        <i class="${icon}"></i>
+        <span>${message}</span>
+    `;
+    
+    // Style the notification
+    notification.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: ${bgColor};
+        color: white;
+        padding: 1rem 1.5rem;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        z-index: 1000;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        animation: slideIn 0.3s ease-out;
+    `;
+    
+    document.body.appendChild(notification);
+    
+    // Remove after 4 seconds
+    setTimeout(() => {
+        if (notification.parentNode) {
+            notification.style.animation = 'slideOut 0.3s ease-out forwards';
+            setTimeout(() => {
+                if (notification.parentNode) {
+                    document.body.removeChild(notification);
+                }
+            }, 300);
+        }
+    }, 4000);
+}
+
+// Add CSS for notifications
+if (!document.querySelector('#notification-styles')) {
+    const style = document.createElement('style');
+    style.id = 'notification-styles';
+    style.textContent = `
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+        
+        @keyframes slideOut {
+            from {
+                transform: translateX(0);
+                opacity: 1;
+            }
+            to {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+        }
+    `;
+    document.head.appendChild(style);
+}
 
 // Prevent form submission (using button click instead)
 document.getElementById('testForm').addEventListener('submit', function(e) {
